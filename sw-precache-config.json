@@ -1,0 +1,8 @@
+{
+  "cacheId": "pwa",
+  "verbose": true,
+  "runtimeCaching": [{
+    "url": "/resources/data/users.json",
+    "handler": "networkFirst"
+  }]
+}

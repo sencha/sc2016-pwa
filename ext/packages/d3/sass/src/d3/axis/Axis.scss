@@ -1,0 +1,31 @@
+/**
+ * @class Ext.d3.axis.Axis
+ */
+
+.#{$d3-prefix}axis {
+    path, line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .#{$d3-prefix}axis-title {
+        font-weight: bold;
+    }
+}
+
+.#{$prefix}rtl {
+    .#{$d3-prefix}axis[data-orient="left"] {
+        .tick text {
+            text-anchor: start !important;
+        }
+
+    }
+    .#{$d3-prefix}axis[data-orient="right"] {
+        .tick text {
+            text-anchor: end !important;
+        }
+
+    }
+}
+

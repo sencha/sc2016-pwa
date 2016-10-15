@@ -1,0 +1,11 @@
+.#{$prefix}d3 {
+    svg {
+        @include user-select(none);
+        -ms-user-select: none;
+        font-family: $font-family;
+    }
+}
+
+.#{$prefix}d3-hidden {
+    visibility: hidden;
+}

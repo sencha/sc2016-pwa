@@ -1,0 +1,101 @@
+{
+  "name": "d3",
+  "namespace": "Ext",
+  "format": "1",
+  "version": "6.2.0.981",
+  "compatVersion": "6.1.0",
+  "creator": "Sencha",
+  "summary": "Sencha D3",
+  "detailedDescription": "Sencha D3 is a package that allows to visualize Ext stores via a set of components built on top of D3, as well as creating custom visualizations.",
+  "type": "code",
+  "requires": [
+    "core"
+  ],
+  "js": [
+    {
+      "path": "${build.environment}/d3.js",
+      "requiresSdk": false,
+      "compress": false
+    }
+  ],
+  "slicer": {
+    "js": [
+      {
+        "path": "${package.dir}/sass/example/custom.js",
+        "isWidgetManifest": true
+      }
+    ]
+  },
+  "builds": {
+    "triton": {
+      "lib": "${package.dir}/d3.js",
+      "toolkit": "classic",
+      "theme": "theme-triton"
+    },
+    "neptune": {
+      "lib": "${package.dir}/d3.js",
+      "toolkit": "classic",
+      "theme": "theme-neptune"
+    },
+    "crisp": {
+      "lib": "${package.dir}/d3.js",
+      "toolkit": "classic",
+      "theme": "theme-crisp"
+    },
+    "classic": {
+      "lib": "${package.dir}/d3.js",
+      "toolkit": "classic",
+      "theme": "theme-classic"
+    },
+    "modern-triton": {
+      "lib": "${package.dir}/d3.js",
+      "toolkit": "modern",
+      "theme": "theme-triton"
+    },
+    "modern-neptune": {
+      "lib": "${package.dir}/d3.js",
+      "toolkit": "modern",
+      "theme": "theme-neptune"
+    },
+    "ios": {
+      "lib": "${package.dir}/d3.js",
+      "toolkit": "modern",
+      "theme": "theme-ios"
+    },
+    "material": {
+      "lib": "${package.dir}/d3.js",
+      "toolkit": "modern",
+      "theme": "theme-material"
+    }
+  },
+  "framework": "ext",
+  "sass": {
+    "namespace": "Ext",
+    "etc": [
+      "${package.dir}/sass/etc/all.scss",
+      "${package.dir}/${toolkit.name}/sass/etc/all.scss"
+    ],
+    "var": [
+      "${package.dir}/sass/var",
+      "${package.dir}/${toolkit.name}/sass/var"
+    ],
+    "src": [
+      "${package.dir}/sass/src",
+      "${package.dir}/${toolkit.name}/sass/src"
+    ]
+  },
+  "output": {
+    "base": "${package.dir}/build/${toolkit.name}/${build.id}",
+    "js": "..",
+    "sass": ""
+  },
+  "classpath": [
+    "${package.lib}",
+    "${package.dir}/src",
+    "${package.dir}/${toolkit.name}/src"
+  ],
+  "overrides": [
+    "${package.dir}/overrides",
+    "${package.dir}/${toolkit.name}/overrides"
+  ]
+}
