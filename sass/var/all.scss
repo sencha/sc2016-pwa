@@ -2,4 +2,12 @@
  * This is is imported by virtue of "sass.var" in "app.json".
  */
 
-$enable-font-awesome: dynamic(true);
+$panel-header-color: $panel-body-color;
+$panel-header-background-color: contrasted($panel-body-background-color, -5%);
+$panel-header-border-width: 0;
+$panel-header-font-weight: 400;
+
+// Application specific variables
+$picture-border-radius: dynamic(50%);
+$blocks-max-width: dynamic(1024px);
+$blocks-spacing: dynamic(1em);

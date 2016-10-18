@@ -87,10 +87,17 @@
         <!--
         calculate the appropriate build.compression value
         -->
-        <condition property="build.compression" value="-yui">
+        <condition property="build.compression" value="-cmd">
             <or>
                 <x-is-true value="${build.compression.yui}"/>
                 <equals arg1="yui" arg2="${app.compressor.type}"/>
+            </or>
+        </condition>
+
+        <condition property="build.compression" value="-cmd">
+            <or>
+                <x-is-true value="${build.compression.cmd}"/>
+                <equals arg1="cmd" arg2="${app.compressor.type}"/>
             </or>
         </condition>
 
@@ -241,6 +248,18 @@
             </then>
         </if>
 
+        <if>
+            <or>
+                <x-is-false value="${app.output.progressive.enable}"/>
+                <not>
+                    <isset property="${app.output.progressive.enable}"/>
+                </not>
+            </or>
+            <then>
+                <property name="${skip.progressive}" value="1"/>
+            </then>
+        </if>
+        
         <if>
             <!--If Deltas are FALSE, deltas do not exist, or caching is disabled then skip delta patching-->
             <or>

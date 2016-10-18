@@ -6,7 +6,7 @@
  * TODO - Replace the content of this view to suit the needs of your application.
  */
 Ext.define('PWA.view.main.Main', {
-    extend: 'Ext.tab.Panel',
+    extend: 'Ext.Container',
     xtype: 'app-main',
 
     requires: [
@@ -19,15 +19,7 @@ Ext.define('PWA.view.main.Main', {
 
     controller: 'main',
     viewModel: 'main',
-
-    defaults: {
-        tab: {
-            iconAlign: 'top'
-        },
-        styleHtmlContent: true
-    },
-
-    tabBarPosition: 'bottom',
+    layout: 'fit',
 
     items: [
         {
@@ -41,39 +33,13 @@ Ext.define('PWA.view.main.Main', {
             }
         },
         {
-            title: 'Home',
-            iconCls: 'x-fa fa-home',
-            layout: 'fit',
-            // The following grid shares a store with the classic version's grid as well!
+            xtype: 'container',
+            scrollable: { y: 'scroll' },
+            reference: 'main',
             items: [{
-                xtype: 'toolbar',
-                docked: 'top',
-                items: [{
-                    xtype: 'button',
-                    text: 'LOAD DATA',
-                    handler: 'onRefresh'
-                }]
-            }, {
-                xtype: 'mainlist'
+                xtype: 'mainlist',
+                scrollable: true
             }]
-        },{
-            title: 'Users',
-            iconCls: 'x-fa fa-user',
-            bind: {
-                html: '{loremIpsum}'
-            }
-        },{
-            title: 'Groups',
-            iconCls: 'x-fa fa-users',
-            bind: {
-                html: '{loremIpsum}'
-            }
-        },{
-            title: 'Settings',
-            iconCls: 'x-fa fa-cog',
-            bind: {
-                html: '{loremIpsum}'
-            }
         }
     ]
 });

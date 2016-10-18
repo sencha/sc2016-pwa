@@ -7,12 +7,12 @@ Ext.define('PWA.store.Personnel', {
         'name', 'email', 'phone'
     ],
 
-    autoLoad: false,
+    autoLoad: true,
 
     proxy: {
         type: 'ajax',
         // @cache({ handler: "networkFirst", cache: { name: "api" } })
-        url: 'resources/data/users.json',
+        url: 'resources/data/list.json',
         reader: {
             type: 'json'
         }

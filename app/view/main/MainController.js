@@ -11,15 +11,15 @@ Ext.define('PWA.view.main.MainController', {
 
     requires: [
         'Ext.data.Store',
-        'Ext.data.proxy.Ajax'
+        'Ext.data.proxy.Ajax',
+        'PWA.view.person.Person',
+        'PWA.model.Person'
     ],
 
     listen: {
-        component: {
+        controller: {
             '*': {
-                focus: function(el) {
-                    console.log('el', el);
-                }
+                'home': 'showList'
             }
         }
     },
@@ -40,35 +40,34 @@ Ext.define('PWA.view.main.MainController', {
     },
 
     onItemSelected: function (sender, record) {
-        Ext.Msg.confirm('Confirm', 'Are you sure?', 'onConfirm', this);
+        this.showPerson(record.get('person'));
     },
 
     onRefresh: function() {
         this.getStore('personnel').reload();
     },
 
-    exampleCacheThenNetwork: function() {
-        Ext.Ajax.request({
-            url: '/foo/bar',
-            success: {
-                cache: function() {
-                    // handle cached response
-                },
-                network: function() {
-                    // handle network response
+    showPerson: function(person) {
+        person = Ext.create('PWA.model.Person', person);
+        console.log('loading', person);
+        var main = this.lookup('main');
+        main.removeAll();
+        main.add({
+            xtype: 'person',
+            viewModel: {
+                data: {
+                    record: person
                 }
             }
-        });
-
-        Ext.create('Ext.data.Store', {
-            proxy: 'ajax',
-            cacheThenNetwork: true
         })
     },
 
-    onConfirm: function (choice) {
-        if (choice === 'yes') {
-            //
-        }
+    showList: function() {
+        var main = this.lookup('main');
+        main.removeAll();
+
+        main.add({
+            xtype: 'mainlist'
+        })
     }
 });

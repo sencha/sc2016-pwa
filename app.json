@@ -3,11 +3,43 @@
      * The application's namespace.
      */
     "name": "PWA",
-    
+
     /**
      * The version of the application.
      */
     "version": "1.0.0.0",
+
+    "progressive": {
+    	"manifest": {
+    		"lang": "en",
+    		"name": "PWA",
+    		"short_name": "ExtJS PWA",
+    		"description": "Ext JS Progressive App",
+    		"icons": [{
+    			"src": "resources/icon-small.png",
+    			"sizes": "96x96"
+    		}, {
+    			"src": "resources/icon-normal.png",
+    			"sizes": "192x192"
+    		}, {
+    			"src": "resources/icon-medium.png",
+    			"sizes": "256x256"
+    		}],
+    		"splash_screens": [{
+    			"src": "resources/splash.png",
+    			"sizes": "600x800"
+    		}],
+    		"theme_color": "#2ebd59",
+    		"background_color": "#000",
+    		"display": "standalone",
+    		"orientation": "portrait",
+    		"start_url": "index.html"
+    	},
+
+    	"cache": {
+
+    	}
+    },
 
     /**
      * The relative path to the application's markup file (html, jsp, asp, etc.).
@@ -39,22 +71,22 @@
      * The Sencha Framework for this application: "ext" or "touch".
      */
     "framework": "ext",
-    
-    
+
+
     /**
      * The toolkit to use. Select either "classic" or "modern".
      */
     "toolkit": "modern",
-    
-    
-    
+
+
+
     /**
      * The name of the theme for this application.
      */
-    
+
     "theme": "theme-material",
-    
-    
+
+
     /**
      * The list of required packages (with optional versions; default is "latest").
      *
@@ -101,19 +133,19 @@
          *         // The file used to save sass variables edited via Sencha Inspector and Sencha Themer.
          *         // This file will automatically be applied to the end of the scss build.
          *         "var": "sass/save.scss",
-         *      
+         *
          *         // The directory used to save generated sass sources.
          *         // This directory will automatically be applied to the end of the scss build.
          *         "src": "sass/save"
          *      }
          *
          */
-         
+
         "generated": {
             "var": "sass/save.scss",
             "src": "sass/save"
         },
-        
+
 
         /**
          * Comma-separated list of files or folders containing extra Sass. These
@@ -313,13 +345,13 @@
             "type": "yui"
         }
     },
-    
+
     /**
      * Settings specific to testing builds.
      */
     "testing": {
     },
-    
+
     /**
      * Settings specific to development builds.
      */
@@ -358,7 +390,7 @@
      */
     "bootstrap": {
         "base": "${app.dir}",
-        
+
         "microloader": "bootstrap.js",
         "css": "bootstrap.css"
     },
@@ -403,15 +435,15 @@
      *      }
      *
      */
-    
+
     "output": {
         "base": "${workspace.build.dir}/${build.environment}/${app.name}",
         "appCache": {
             "enable": false
         }
     },
-    
-    
+
+
     /**
     * Controls for localStorage caching
     *   "cache": {
@@ -427,12 +459,12 @@
     *       "deltas": "deltas"
     *   }
     */
-    
+
     "cache": {
         "enable": false,
         "deltas": true
     },
-    
+
 
     /**
      * Used to automatically generate cache.manifest (HTML 5 application cache manifest)
@@ -473,9 +505,9 @@
      * generated inside this directory must be kept intact for proper generation of
      * deltas between updates.
      */
-    
+
     "archivePath": "archive",
-    
+
 
 
     "slicer": null,
@@ -489,8 +521,8 @@
      * names.
      *
      */
-    
-    
+
+
     /**
      * File / directory name patttern to ignore when copying to the builds. Must be a
      * valid regular expression.
