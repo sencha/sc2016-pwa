@@ -1,4 +1,4 @@
-/* global Ext, spyOn, expect, MockAjaxManager, jasmine */
+/* global Ext, spyOn, expect, MockAjaxManager, jasmine, spyOnEvent */
 
 describe("Ext.data.TreeStore", function() {
     var store,
@@ -25,15 +25,6 @@ describe("Ext.data.TreeStore", function() {
                 {name: 'duration', type: 'string'}
             ]
         });
-
-    function spyOnEvent(object, eventName, fn) {
-        var obj = {
-            fn: fn || Ext.emptyFn
-        },
-        spy = spyOn(obj, "fn");
-        object.addListener(eventName, obj.fn);
-        return spy;
-    }
 
     function expandify(nodes) {
         if (Ext.isNumber(nodes[0])) {

@@ -1849,6 +1849,9 @@ var makeCtor = Ext.Class.makeCtor,
             delete Manager.classState[className];
 
             Manager.removeName(className);
+            // Indiscriminately clear all factory caches here. It might be slightly inefficient however undefine
+            // is typically only called during unit testing.
+            Ext.Factory.clearCaches();
 
             var entry = Manager.getNamespaceEntry(className),
                 scope = entry.parent ? Manager.lookupName(entry.parent, false) : Ext.global;

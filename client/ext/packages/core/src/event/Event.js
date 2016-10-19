@@ -167,6 +167,13 @@ Ext.define('Ext.event.Event', {
 
         /**
          * @private
+         * An amalgamation of pointerEvents/mouseEvents/touchEvents.
+         * Will be populated in class callback.
+         */
+        gestureEvents: {},
+
+        /**
+         * @private
          */
         pointerEvents: {
             pointerdown: 1,
@@ -317,16 +324,16 @@ Ext.define('Ext.event.Event', {
                 result[eventFlag] = true;
             }
             if (result.ctrlKey) {
-                result.push(me.modifierGlyphs.ctrlKey)
+                result.push(me.modifierGlyphs.ctrlKey);
             }
             if (result.altKey) {
-                result.push(me.modifierGlyphs.altKey)
+                result.push(me.modifierGlyphs.altKey);
             }
             if (result.shiftKey) {
-                result.push(me.modifierGlyphs.shiftKey)
+                result.push(me.modifierGlyphs.shiftKey);
             }
             if (result.metaKey) {
-                result.push(me.modifierGlyphs.metaKey)
+                result.push(me.modifierGlyphs.metaKey);
             }
             result.push(this.specialKeyGlyphs[rawKey] || rawKey);
             return result.join('');
@@ -830,7 +837,7 @@ Ext.define('Ext.event.Event', {
 
         me.claimed = true;
 
-        if (parentEvent && !me.hasOwnProperty('isGesture')) {
+        if (parentEvent && !me.isGesture) {
             parentEvent.claimGesture();
         } else {
             // Claiming a gesture should also prevent default browser actions like pan/zoom
@@ -1126,7 +1133,12 @@ Ext.define('Ext.event.Event', {
         }())
     },
     keyCodes = {},
+    gestureEvents = Event.gestureEvents,
     keyName, keyCode;
+
+    Ext.apply(gestureEvents, Event.mouseEvents);
+    Ext.apply(gestureEvents, Event.pointerEvents);
+    Ext.apply(gestureEvents, Event.touchEvents);
 
     Ext.apply(Event, constants);
     Ext.apply(prototype, constants);

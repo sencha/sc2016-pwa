@@ -320,7 +320,7 @@ Ext.define('Ext.chart.axis.Axis', {
         /**
          * @private
          * @cfg {Number} rotation
-         * Rotation of the polar axis.
+         * Rotation of the polar axis in radians.
          * WARNING: Meant to be set automatically by chart. Do not set it manually.
          */
         rotation: null,

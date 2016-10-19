@@ -433,7 +433,9 @@ Ext.define('Ext.Widget', {
     },
 
     addCls: function(cls) {
-        this.el.addCls(cls);
+        if (!this.destroyed) {
+            this.el.addCls(cls);
+        }
     },
 
     applyBaseCls: function(baseCls) {
@@ -828,7 +830,9 @@ Ext.define('Ext.Widget', {
     },
 
     removeCls: function(cls) {
-        this.el.removeCls(cls);
+        if (!this.destroyed) {
+            this.el.removeCls(cls);
+        }
     },
 
     /**
@@ -1127,7 +1131,7 @@ Ext.define('Ext.Widget', {
 
         detachFromBody: function() {
             // See reattachToBody
-            Ext.getDetachedBody().appendChild(this.element);
+            Ext.getDetachedBody().appendChild(this.element, true);
             this.isDetached = true;
         },
 

@@ -253,6 +253,10 @@ input, textarea {
     position: absolute !important;
 }
 
+.#{$prefix}unselectable {
+    @include no-select;
+}
+
 .#{$prefix}center {
     @include absolute-position();
     @include st-box();

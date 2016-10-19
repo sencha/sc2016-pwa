@@ -1,6 +1,14 @@
 Ext.define('Ext.rtl.grid.column.Column', {
     override: 'Ext.grid.column.Column',
 
+    beforeRender: function() {
+        var me = this;
+        if (me.getInherited().rtl) {
+            me._alignMap = me._rtlAlignMap;
+        }
+        me.callParent();
+    },
+
     isAtStartEdge: function(e, margin) {
         var me = this,
             offset;
@@ -26,7 +34,7 @@ Ext.define('Ext.rtl.grid.column.Column', {
     },
 
     privates: {
-        _alignMap: {
+        _rtlAlignMap: {
             start: 'right',
             end: 'left'
         }

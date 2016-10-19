@@ -383,11 +383,18 @@ Ext.define('Ext.drag.Source', {
     },
 
     updateElement: function(element, oldElement) {
+        // We can't bind/unbind these listeners with getElListeners because
+        // they will conflict with the dragstart gesture event
+        if (oldElement) {
+            oldElement.un('dragstart', 'stopNativeDrag', this);
+        }
+
         if (element && !this.getHandle()) {
             element.setTouchAction({
                 panX: false,
                 panY: false
             });
+            element.on('dragstart', 'stopNativeDrag', this, {translate: false});
         }
         this.callParent([element, oldElement]);
     },
@@ -690,6 +697,10 @@ Ext.define('Ext.drag.Source', {
          *
          * @private
          */
-        setup: Ext.privateFn
+        setup: Ext.privateFn,
+
+        stopNativeDrag: function(e) {
+            e.preventDefault();
+        }
     }
 });

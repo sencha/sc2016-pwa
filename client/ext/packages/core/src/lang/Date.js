@@ -982,7 +982,7 @@ utilDate = {
      * @private
      */
     parseCodes : {
-        /**
+        /*
          * Notes:
          * g = {Number} calculation group (0 or 1. only group 1 contributes to date calculations.)
          * c = {String} calculation method (required for group 1. null for group 0. {0} = currentGroup - position in regex result array)

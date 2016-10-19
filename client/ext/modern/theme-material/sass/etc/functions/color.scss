@@ -1,4 +1,3 @@
-// Inspired by
 $material-colors: dynamic((
     'red': (
         '50': #ffebee,
@@ -296,25 +295,25 @@ $material-colors: dynamic((
 ));
 
 $material-foreground-colors: dynamic((
-    'red': #ffffff,
-    'pink': #ffffff,
-    'purple': #ffffff,
-    'deep-purple': #ffffff,
-    'indigo': #ffffff,
-    'blue': #ffffff,
-    'light-blue': #ffffff,
-    'cyan': #ffffff,
-    'teal': #ffffff,
-    'green': #ffffff,
-    'light-green': #ffffff,
-    'lime': #111111,
-    'yellow': #111111,
-    'amber': #111111,
-    'orange': #111111,
-    'deep-orange': #ffffff,
-    'brown': #ffffff,
-    'grey': #111111,
-    'blue-grey': #ffffff
+    'red': #fff,
+    'pink': #fff,
+    'purple': #fff,
+    'deep-purple': #fff,
+    'indigo': #fff,
+    'blue': #fff,
+    'light-blue': #fff,
+    'cyan': #fff,
+    'teal': #fff,
+    'green': #222,
+    'light-green': #222,
+    'lime': #222,
+    'yellow': #222,
+    'amber': #222,
+    'orange': #222,
+    'deep-orange': #fff,
+    'brown': #fff,
+    'grey': #222,
+    'blue-grey': #fff
 ));
 
 @function material-color($color-name, $color-variant: '500') {

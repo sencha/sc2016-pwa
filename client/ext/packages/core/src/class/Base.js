@@ -952,7 +952,7 @@ var noArgs = [],
             var me = this,
                 mixin, prototype, key, statics, i, ln, 
                 mixinName, name, mixinValue, mixins,
-                mixinStatics;
+                mixinStatics, staticName;
 
             if (typeof name !== 'string') {
                 mixins = name;
@@ -1015,9 +1015,9 @@ var noArgs = [],
 
             if (statics) {
                 mixinStatics = {};
-                for (name in statics) {
-                    if (!me.hasOwnProperty(name)) {
-                        mixinStatics[name] = mixinClass[name];
+                for (staticName in statics) {
+                    if (!me.hasOwnProperty(staticName)) {
+                        mixinStatics[staticName] = mixinClass[staticName];
                     }
                 }
                 me.addInheritableStatics(mixinStatics);

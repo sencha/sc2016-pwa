@@ -529,7 +529,9 @@ Ext.define('Ext.app.Application', {
         }
 
         // After launch we may as well cleanup the namespace cache
-        Ext.defer(Ext.ClassManager.clearNamespaceCache, 2000, Ext.ClassManager);
+        if (!me.cnsTimer) {
+            me.cnsTimer = Ext.defer(Ext.ClassManager.clearNamespaceCache, 2000, Ext.ClassManager);
+        }
     },
 
     getModuleClassName: function(name, kind) {
@@ -651,7 +653,8 @@ Ext.define('Ext.app.Application', {
             controllers = me.controllers,
             ns = Ext.namespace(me.getName()),
             appProp = me.getAppProperty();
-        
+
+        clearTimeout(me.cnsTimer);
         Ext.un('appupdate', me.onAppUpdate, me);
          
         Ext.destroy(me.viewport);

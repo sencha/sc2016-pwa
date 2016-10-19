@@ -192,10 +192,6 @@ Ext.define('Ext.util.Positionable', {
      *
      * - **Blank**: Defaults to aligning the element's top-left corner to the target's
      *   bottom-left corner ("tl-bl").
-     * - **One anchor (deprecated)**: The passed anchor position is used as the target
-     *   element's anchor point.  The element being aligned will position its top-left
-     *   corner (tl) to that point. *This method has been deprecated in favor of the newer
-     *   two anchor syntax below*.
      * - **Two anchors**: If two values from the table below are passed separated by a dash,
      *   the first value is used as the element's anchor point, and the second value is
      *   used as the target's anchor point.
@@ -204,7 +200,7 @@ Ext.define('Ext.util.Positionable', {
      *   point to align with a similar point in the target. So `'t0-b0'` would be
      *   the same as `'tl-bl'`, `'l0-r50'` would place the top left corner of this item
      *   halfway down the right edge of the target item. This allows more flexibility
-     *   and also describes which two edges are considered adjacent when positioning an anchor. 
+     *   and also describes which two edges are considered adjacent when positioning a tip pointer. 
      *
      * In addition to the anchor points, the position parameter also supports the "?"
      * character. If "?" is passed at the end of the position string, the element will
@@ -233,7 +229,7 @@ Ext.define('Ext.util.Positionable', {
      *
      *     // align the top left corner of el with the top right corner of other-el
      *     // (constrained to viewport)
-     *     el.alignTo("other-el", "tr?");
+     *     el.alignTo("other-el", "tl-tr?");
      *
      *     // align the bottom right corner of el with the center left edge of other-el
      *     el.alignTo("other-el", "br-l?");
@@ -241,6 +237,10 @@ Ext.define('Ext.util.Positionable', {
      *     // align the center of el with the bottom left corner of other-el and
      *     // adjust the x position by -6 pixels (and the y position by 0)
      *     el.alignTo("other-el", "c-bl", [-6, 0]);
+     *
+     *     // align the 25% point on the bottom edge of this el
+     *     // with the 75% point on the top edge of other-el.
+     *     el.alignTo("other-el", 'b25-c75');
      *
      * @param {Ext.util.Positionable/HTMLElement/String} element The Positionable,
      * HTMLElement, or id of the element to align to.

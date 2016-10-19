@@ -118,7 +118,10 @@ Ext.define('Ext.draw.Container', {
      */
 
     config: {
-        cls: Ext.baseCSSPrefix + 'draw-container',
+        cls: [
+            Ext.baseCSSPrefix + 'draw-container',
+            Ext.baseCSSPrefix + 'unselectable'
+        ],
 
         /**
          * @cfg {Function} [resizeHandler]

@@ -1128,6 +1128,16 @@ Ext.define('Ext.view.Table', {
         }
     },
     
+    afterComponentLayout: function(width, height, oldWidth, oldHeight) {
+        var me = this,
+            ownerGrid = me.grid.ownerGrid;
+
+        if (ownerGrid.mixins.lockable) {
+            ownerGrid.syncLockableLayout();
+        }
+        me.callParent([width, height, oldWidth, oldHeight]);
+    },
+    
     getElConfig: function() {
         var config = this.callParent();
         
@@ -1234,7 +1244,8 @@ Ext.define('Ext.view.Table', {
     createRowElement: function(record, index, updateColumns) {
         var me = this,
             div = me.renderBuffer,
-            tplData = me.collectData([record], index);
+            tplData = me.collectData([record], index),
+            result;
 
         tplData.columns = updateColumns;
         me.tpl.overwrite(div, tplData);
@@ -1243,7 +1254,9 @@ Ext.define('Ext.view.Table', {
         me.cleanupData();
         
         // Return first element within node containing element
-        return Ext.fly(div).down(me.getNodeContainerSelector(), true).firstChild;
+        result = div.down(me.getNodeContainerSelector(), true).firstChild;
+        Ext.fly(result).saveTabbableState(me.saveTabOptions);
+        return result;
     },
 
     /** 
@@ -1263,12 +1276,9 @@ Ext.define('Ext.view.Table', {
         me.cleanupData();
 
         // Newly added rows must be untabbable by default
-        Ext.fly(div).saveTabbableState({
-            skipSelf: true,
-            includeHidden: true
-        });
+        div.saveTabbableState(me.saveTabOptions);
 
-        div = Ext.fly(div).down(me.getNodeContainerSelector(), true);
+        div = div.down(me.getNodeContainerSelector(), true);
         if (range) {
             range.selectNodeContents(div);
             result = range.extractContents();
@@ -1391,12 +1401,9 @@ Ext.define('Ext.view.Table', {
         // CQ interface
         var me = this,
             rowContexts = me.ownerGrid.liveRowContexts,
-            widgetCount,
-            i,
-            widgets,
-            widget,
-            recordId,
-            result = me.callParent(arguments);
+            isLocked = !!me.isLockedView,
+            result = me.callParent([deep]),
+            widgetCount, i, widgets, widget, recordId;
 
         // Add the widgets from the RowContexts.
         // If deep, add any descendant widgets within them.
@@ -1406,9 +1413,8 @@ Ext.define('Ext.view.Table', {
             for (i = 0; i < widgetCount; i++) {
                 widget = widgets[i];
 
-                // Check that the upward link injected into the widget leads
-                // to this View (locked views)
-                if (me.isAncestor(widget)) {
+                // If we're in a lockable assembly, check that we're in the same side
+                if (isLocked === widget.$fromLocked) {
                     result[result.length] = widget;
                     if (deep && widget.getRefItems) {
                         result.push.apply(result, widget.getRefItems(true));
@@ -2163,12 +2169,14 @@ Ext.define('Ext.view.Table', {
 
     onFocusLeave: function(e) {
         var me = this,
+            isLeavingGrid;
+
+        // If the blur was caused by a refresh, we expect things to be refocused.
+        if (!me.destroying && !me.refreshing) {
             // See if focus is really leaving the grid.
             // If we have a locking partner, and focus is going to that, we're NOT leaving the grid.
             isLeavingGrid = !me.lockingPartner || !e.toComponent || (e.toComponent !== me.lockingPartner && !me.lockingPartner.isAncestor(e.toComponent));
-
-        // If the blur was caused by a refresh, we expect things to be refocused.
-        if (!me.refreshing) {
+            
             // Ignore this event if we do not actually contain focus.
             // CellEditors are rendered into the view's encapculating element,
             // So focusleave will fire when they are programatically blurred.
@@ -2347,26 +2355,24 @@ Ext.define('Ext.view.Table', {
         var me = this,
             store = me.dataSource,
             focusPosition = me.lastFocused,
-            newPosition = new Ext.grid.CellContext((me.isNormalView && me.lockingPartner.grid.isVisible() && !me.lockingPartner.grid.collapsed) ? me.lockingPartner : me).setPosition(0, 0),
-            targetCell,
-            scroller;
-
+            newPosition = new Ext.grid.CellContext(me).setPosition(0, 0),
+            targetCell, scroller;
         if (fromComponent) {
             // Tabbing in from one of our column headers; the user will expect to land in that column.
             // Unless it is configured cellFocusable: false
-            if (fromComponent.isColumn && fromComponent.cellFocusable !== false && fromComponent.getView() === me) {
+            if (fromComponent.isColumn && fromComponent.cellFocusable !== false) {
                 if (!focusPosition) {
                     focusPosition = newPosition;
                 }
                 focusPosition.setColumn(fromComponent);
+                focusPosition.setView(fromComponent.getView());
             }
             // Tabbing in from the neighbouring TableView (eg, locking).
             // Go to column zero, same record
-            else if (fromComponent.isTableView) {
+            else if (fromComponent.isTableView && fromComponent.lastFocused) {
                 focusPosition = new Ext.grid.CellContext(me).setPosition(fromComponent.lastFocused.record, 0);
             }
         }
-
         // We found a position from the "fromComponent, or there was a previously focused context
         if (focusPosition) {
             scroller = me.getScrollable();
@@ -2375,22 +2381,18 @@ Ext.define('Ext.view.Table', {
             if (!store.contains(focusPosition.record) || (scroller && !scroller.isInView(focusPosition.getRow()).y)) {
                 focusPosition.setRow(store.getAt(Math.min(focusPosition.rowIdx, store.getCount() - 1)));
             }
-        }
-        // All else failes, find the first focusable cell.
-        else {
+        } else // All else fails, find the first focusable cell.
+        {
             focusPosition = newPosition;
-
             // Find the first focusable cell.
-            targetCell = me.ownerGrid.view.el.down(me.getCellSelector() + '[tabIndex="-1"]');
+            targetCell = me.el.down(me.getCellSelector() + '[tabIndex="-1"]');
             if (targetCell) {
                 focusPosition.setPosition(me.getRecord(targetCell), me.getHeaderByCell(targetCell));
-            }
-            // All visible columns are cellFocusable: false
-            else {
+            } else // All visible columns are cellFocusable: false
+            {
                 focusPosition = null;
             }
         }
-        
         return focusPosition;
     },
     
@@ -3675,6 +3677,11 @@ Ext.define('Ext.view.Table', {
     },
 
     privates: {
+        saveTabOptions: {
+            skipSelf: true,
+            includeHidden: true
+        },
+
         /*
          * Overridden implementation.
          * Called by refresh to collect the view item nodes.

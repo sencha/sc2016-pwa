@@ -547,7 +547,7 @@ Ext.define('Ext.app.bind.Stub', {
             var me = this,
                 current = me.boundValue;
 
-            if (current) {
+            if (current && !current.destroyed) {
                 if (current.isModel) {
                     current.unjoin(me);
                 } else {

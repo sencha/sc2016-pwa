@@ -1,3 +1,5 @@
+/* global Ext, expect, jasmine */
+
 describe('Ext.grid.plugin.RowEditing', function () {
     var store, plugin, grid, view, column,
         synchronousLoad = true,
@@ -62,7 +64,10 @@ describe('Ext.grid.plugin.RowEditing', function () {
         // Undo the overrides.
         Ext.data.ProxyStore.prototype.load = proxyStoreLoad;
 
-        store = plugin = grid = view = column = Ext.destroy(grid);
+        waits(100);
+        runs(function() {
+            store = plugin = grid = view = column = Ext.destroy(grid);
+        });
     });
 
     describe('Widget column', function() {
@@ -206,6 +211,8 @@ describe('Ext.grid.plugin.RowEditing', function () {
                 column = grid.columns[0];
 
                 plugin.startEdit(record, column);
+
+                waitsForFocus(plugin.getEditor());
             });
 
             afterEach(function () {

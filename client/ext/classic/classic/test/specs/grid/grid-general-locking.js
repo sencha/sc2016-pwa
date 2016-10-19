@@ -370,4 +370,69 @@ describe("grid-general-locking", function() {
             });
         });
     });
+
+    describe('Focusing the view el, not a cell', function() {
+        it('should move to the same row on the other side', function() {
+            var errorSpy = jasmine.createSpy('error handler'),
+                old = window.onError;
+
+            store = new Ext.data.ArrayStore({
+                data: [
+                    [ 1, 'Lorem'],
+                    [ 2, 'Ipsum'],
+                    [ 3, 'Dolor']
+                ],
+                fields: ['row', 'lorem']
+            });
+
+            window.onerror = errorSpy.andCallFake(function() {
+                if (old) {
+                    old();
+                }
+            });
+
+            createGrid();
+
+            runs(function() {
+                jasmine.fireMouseEvent(grid.normalGrid.view.el, 'click', 200, 200);
+                expect(errorSpy).not.toHaveBeenCalled();
+            });
+
+            waitsFor(function() {
+                return grid.normalGrid.containsFocus;
+            });
+
+            runs(function() {
+                jasmine.fireMouseEvent(grid.lockedGrid.view.el, 'click', 25, 200);
+                expect(errorSpy).not.toHaveBeenCalled();
+            });
+
+            waitsFor(function() {
+                return grid.lockedGrid.containsFocus;
+            });
+
+            runs(function() {
+                jasmine.fireMouseEvent(grid.normalGrid.view.el, 'click', 200, 200);
+                expect(errorSpy).not.toHaveBeenCalled();
+            });
+
+            waitsFor(function() {
+                return grid.normalGrid.containsFocus;
+            });
+
+            runs(function() {
+                jasmine.fireMouseEvent(grid.lockedGrid.view.el, 'click', 25, 200);
+                expect(errorSpy).not.toHaveBeenCalled();
+            });
+
+            waitsFor(function() {
+                return grid.lockedGrid.containsFocus;
+            });
+
+            runs(function() {
+                expect(errorSpy).not.toHaveBeenCalled();
+                window.onerror = old;
+            });
+        });
+    });
 });

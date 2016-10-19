@@ -405,12 +405,6 @@ Ext.define('Ext.grid.plugin.RowExpander', {
         if (me.scrollIntoViewOnExpand && wasCollapsed) {
             me.grid.ensureVisible(rowIdx);
         }
-
-        // The two sides are layout roots. The top grid will not have layed out.
-        // We must postprocess it now.
-        if (ownerLockable && ownerLockable.componentLayoutCounter === componentLayoutCounter) {
-            ownerLockable.syncLockableLayout();
-        }
     },
 
     // Called from TableLayout.finishedLayout

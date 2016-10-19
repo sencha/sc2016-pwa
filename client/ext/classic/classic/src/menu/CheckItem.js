@@ -229,7 +229,7 @@ Ext.define('Ext.menu.CheckItem', {
                 return false;
             }
         }
-        this.callParent([e]);
+        return me.callParent([e]);
     },
 
     doDestroy: function() {

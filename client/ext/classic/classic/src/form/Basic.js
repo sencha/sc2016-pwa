@@ -349,7 +349,8 @@ Ext.define('Ext.form.Basic', {
     destroy: function() {
         var me = this,
             mon = me.monitor;
-        
+
+        clearTimeout(me.actionTimer);
         if (mon) {
             mon.unbind();
             me.monitor = null;
@@ -648,14 +649,16 @@ Ext.define('Ext.form.Basic', {
      * @return {Ext.form.Basic} this
      */
     doAction: function(action, options) {
+        var me = this;
+
         if (Ext.isString(action)) {
-            action = Ext.ClassManager.instantiateByAlias('formaction.' + action, Ext.apply({}, options, {form: this}));
+            action = Ext.ClassManager.instantiateByAlias('formaction.' + action, Ext.apply({}, options, {form: me}));
         }
-        if (this.fireEvent('beforeaction', this, action) !== false) {
-            this.beforeAction(action);
-            Ext.defer(action.run, 100, action);
+        if (me.fireEvent('beforeaction', me, action) !== false) {
+            me.beforeAction(action);
+            me.actionTimer = Ext.defer(action.run, 100, action);
         }
-        return this;
+        return me;
     },
 
     /**

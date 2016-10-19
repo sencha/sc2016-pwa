@@ -361,8 +361,9 @@ Ext.define('Ext.grid.NavigationModel', {
             // touchstart does not focus the closest cell, leave it until touchend (translated as a click)
             if (clickEvent.pointerType === 'touch') {
                 this.setPosition(clickEvent.position, null, clickEvent);
+            } else {
+                this.fireNavigateEvent(clickEvent);
             }
-            this.fireNavigateEvent(clickEvent);
         }
     },
 
@@ -862,12 +863,15 @@ Ext.define('Ext.grid.NavigationModel', {
     move: function(dir, keyEvent) {
         var me = this,
             position = me.getPosition(),
-            result = position;
+            result = position,
+            rowVeto = keyEvent.shiftKey && (dir === 'right' || dir === 'left');
         
         if (position && position.record) {
             while (result) {
                 // Do not allow SHIFT+(left|right) to wrap.
-                result = position.view.walkCells(result, dir, keyEvent.shiftKey && (dir === 'right' || dir === 'left') ? me.vetoRowChange : null, me);
+                // Important to use result.view, since a call to walkCells could change the
+                // resulting view if we're using locking.
+                result = result.view.walkCells(result, dir, rowVeto ? me.vetoRowChange : null, me);
 
                 // If the new position is fousable, we're done.
                 if (result && result.column.cellFocusable !== false) {

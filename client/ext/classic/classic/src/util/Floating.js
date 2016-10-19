@@ -579,10 +579,11 @@ Ext.define('Ext.util.Floating', {
      */
     center: function() {
         var me = this,
+            parent = me.floatParent,
             xy;
 
         if (me.isVisible()) {
-            xy = me.getAlignToXY(me.container, 'c-c');
+            xy = me.getAlignToXY(parent ? parent.getTargetEl() : me.container, 'c-c');
             me.setPagePosition(xy);
         } else {
             me.needsCenter = true;

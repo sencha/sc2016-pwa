@@ -1,7 +1,8 @@
-/* global expect, Ext, MockAjaxManager */
+/* global expect, Ext, MockAjaxManager, xit */
 
 describe('Ext.grid.feature.Summary', function () {
-    var synchronousLoad = true,
+    var itNotIE8 = Ext.isIE8 ? xit : it,
+        synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
@@ -84,7 +85,7 @@ describe('Ext.grid.feature.Summary', function () {
                     renderTo: Ext.getBody()
                 }, gridCfg));
 
-                view = grid.view;
+                view = grid.getView();
                 selector = summary.summaryRowSelector;
                 if (withLocking) {
                     lockedGrid = grid.lockedGrid;
@@ -855,9 +856,10 @@ describe('Ext.grid.feature.Summary', function () {
             });
 
             describe("buffered rendering", function() {
-                it("should not render the summary row until the last row is in the view", function() {
+                itNotIE8("should not render the summary row until the last row is in the view", function() {
                     var data = [],
-                        i;
+                        i,
+                        summaryErroreouslyRendered = false;
 
                     for (i = 1; i <= 1000; ++i) {
                         data.push({
@@ -873,7 +875,7 @@ describe('Ext.grid.feature.Summary', function () {
                     }, null, null, data);
 
                     var theView = withLocking ? lockedView : view,
-                        scrollingView = withLocking ? normalView : view;
+                        scroller = withLocking ? grid.getScrollable() : view.getScrollable();
 
                     expect(theView.getEl().down(selector)).toBeNull();
                     
@@ -882,22 +884,19 @@ describe('Ext.grid.feature.Summary', function () {
                     // As soon as it is present, check that the summary is there and quit.
                     // N.B. This latch function accepts done callback and because of this
                     // it will be called only ONCE, not in a loop!
-                    waitsFor(function(done) {
-                        grid.getScrollable().on('scroll', function() {
-                            if (view.all.endIndex === store.getCount() - 1) {
-                                done();
-                            }
-                            else {
-                                expect(theView.getEl().down(selector)).toBeNull();
-                                grid.getScrollable().scrollBy(0, 100);
-                            }
-                        });
-                        
-                        grid.getScrollable().scrollBy(0, 100);
-                    // 15 seconds should be enough even for IE8
-                    }, 'downward scrolling to complete', 15000);
+                    jasmine.waitsForScroll(scroller, function() {
+                        if (view.all.endIndex === store.getCount() - 1 || summaryErroreouslyRendered) {
+                            return true;
+                        }
+                        else {
+                            summaryErroreouslyRendered = !!theView.getEl().down(selector);
+                            scroller.scrollBy(0, 200);
+                        }
+                    // 30 seconds should be enough even for IE8
+                    }, 'downward scrolling to complete', 30000);
                     
                     runs(function() {
+                        expect(summaryErroreouslyRendered).toBe(false);
                         expect(theView.getEl().down(selector)).not.toBeNull();
                     });
                 });

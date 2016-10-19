@@ -393,9 +393,7 @@ describe('Ext.selection.CheckboxModel', function() {
                 grid.focus();
 
                 // Wait for the asynchronous focus processing to occur for IE
-                waitsFor(function() {
-                    return view.cellFocused;
-                });
+                waitsForFocus(view, 'view to gain focus');
                 
                 runs(function() {
                     clickCheckbox(0);

@@ -481,25 +481,30 @@ Ext.define('Ext.dd.DragDropManager', {
                 destroyable: true,
                 scope: me
             },
-            supports = Ext.supports;
+            DomEventType = e.browserEvent.type;
 
         // On devices that support multi-touch the second touch terminates drag
         listeners.touchstart = me.handleMouseUp;
 
         // Listen for the right kind of events depending on how
         // the drag was initiated.
-        if (supports.PointerEvents) {
+        // Pointer events standard
+        if (DomEventType === 'pointerdown') {
             listeners.pointerup = pointerup;
             listeners.pointermove = pointermove;
-        } else if (supports.MSPointerEvents) {
-            // https://sencha.jira.com/browse/EXTJS-21512
-            // Spurious pointer events from -ms-pointer-events devices
+        }
+        // IE10 pointer event
+        else if (DomEventType === 'MSPointerDown') {
+            listeners.MSPointerUp = pointerup;
+            listeners.MSPointerMove = pointermove;
+        }
+        // Real mouse event
+        else if (DomEventType === 'mousedown') {      
             listeners.mouseup = pointerup;
             listeners.mousemove = pointermove;
-        } else if (e.pointerType === 'mouse') {      
-            listeners.mouseup = pointerup;
-            listeners.mousemove = pointermove;
-        } else {
+        }
+        // Touch start
+        else {
             listeners.touchend = pointerup;
             listeners.touchmove = pointermove;
         }
@@ -849,7 +854,7 @@ Ext.define('Ext.dd.DragDropManager', {
                     }
                     // Otherwise we use event source of the mousemove event
                     else {
-                        if (e.within(overTarget.getEl())) {
+                        if (e.within(overTargetEl)) {
                             allTargets.push(overTarget);
                             break;
                         }

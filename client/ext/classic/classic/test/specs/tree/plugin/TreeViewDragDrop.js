@@ -1,5 +1,6 @@
 describe("Ext.tree.plugin.TreeViewDragDrop", function() {
-    var TreeItem = Ext.define(null, {
+    var itNotTouch = jasmine.supportsTouch ? xit : it,
+        TreeItem = Ext.define(null, {
         extend: 'Ext.data.TreeModel',
         fields: ['id', 'text', 'secondaryId'],
         proxy: {
@@ -134,10 +135,18 @@ describe("Ext.tree.plugin.TreeViewDragDrop", function() {
             // Disable fx to avoid animation errors while destroying the treepanel
             Ext.enableFx = false;
             jasmine.fireMouseEvent(cell, 'mousedown');
-            jasmine.fireMouseEvent(cell, 'mousemove', 5, 20);
-            expect(Ext.fly(dragZone.dragData.item).contains(cell)).toBe(true);
-            jasmine.fireMouseEvent(cell, 'mouseup');
-            Ext.enableFx = true;
+
+            // Longpress to trigger drag on touch
+            if (jasmine.supportsTouch) {
+                waits(1500);
+            }
+            
+            runs(function() {
+                jasmine.fireMouseEvent(cell, 'mousemove', 5, 20);
+                expect(Ext.fly(dragZone.dragData.item).contains(cell)).toBe(true);
+                jasmine.fireMouseEvent(cell, 'mouseup');
+                Ext.enableFx = true;
+            });
         });
     });
 
@@ -157,7 +166,7 @@ describe("Ext.tree.plugin.TreeViewDragDrop", function() {
             });
         });
 
-        it("should be able to focus the widget with a mouse click", function() {
+        itNotTouch("should be able to focus the widget with a mouse click", function() {
             jasmine.fireMouseEvent(getWidget(0).el.dom, 'click');
 
             expect(getWidget(0).hasFocus).toBe(true);

@@ -1331,15 +1331,20 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         */
         clearManagedListeners: function() {
             var me = this,
-                managedListeners = me.managedListeners ? me.managedListeners.slice() : [],
-                i = 0,
-                len = managedListeners.length;
+                managedListeners = me.managedListeners,
+                i, len;
 
-            for (; i < len; i++) {
-                me.removeManagedListenerItem(true, managedListeners[i]);
+            if (managedListeners) {
+                // So that Event#removeListener doesn't find a managedListeners array from which to remove
+                // the listener it is removing. It iterates the array to find a match, and splices it.
+                me.managedListeners = null;
+                for (i = 0, len = managedListeners.length; i < len; i++) {
+                    me.removeManagedListenerItem(true, managedListeners[i]);
+                }
+                managedListeners.length = 0;
             }
 
-            me.managedListeners = [];
+            me.managedListeners = managedListeners;
         },
 
         /**
@@ -1534,7 +1539,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         * or
         *     this.store.relayers.destroy();
         */
-        relayEvents : function(origin, events, prefix) {
+        relayEvents: function(origin, events, prefix) {
             var me = this,
                 len = events.length,
                 i = 0,

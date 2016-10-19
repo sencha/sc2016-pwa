@@ -13,8 +13,6 @@ $panel-body-font-size-big: dynamic(px-to-rem(14px, 14px));
 $panel-body-line-height: dynamic(px-to-em(18px, 12px));
 $panel-body-line-height-big: dynamic(px-to-em(20px, 14px));
 
-$panel-body-padding: dynamic(px-to-em($content-padding, 12px));
-$panel-body-padding-big: dynamic(px-to-em($content-padding, 14px));
 $panel-header-color: dynamic($base-foreground-color);
 $panel-header-background-color: dynamic($base-color);
 $panel-header-border-color: dynamic($panel-border-color);

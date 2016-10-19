@@ -368,6 +368,7 @@ Ext.define('Ext.sparkline.Base', {
     },
 
     onMouseEnter: function(e) {
+        this.canvasRegion = this.canvas.el.getRegion(),
         this.onMouseMove(e);
     },
 
@@ -386,11 +387,13 @@ Ext.define('Ext.sparkline.Base', {
     updateDisplay: function () {
         var me = this,
             values = me.getValues(),
-            offset, tipHtml, region;
+            tipHtml, region;
 
-        if (values && values.length && me.currentPageXY && me.el.getRegion().contains(me.currentPageXY)) {
-            offset = me.canvas.el.getXY();
-            region = me.getRegion(me.currentPageXY[0] - offset[0], me.currentPageXY[1] - offset[1]);
+        // To work out the position of currentPageXY within the canvas, we must account for the fact that
+        // while document Y values as represented in the currentPageXY are based from the top of
+        // the document, canvas Y values begin from the bottom of the canvas element.
+        if (values && values.length && me.currentPageXY && me.canvasRegion.contains(me.currentPageXY)) {
+            region = me.getRegion(me.currentPageXY[0] - me.canvasRegion.left, (me.canvasRegion.bottom - 1) - me.currentPageXY[1]);
 
             if (region != null && me.isValidRegion(region, values)) {
                 if (!me.disableHighlight) {

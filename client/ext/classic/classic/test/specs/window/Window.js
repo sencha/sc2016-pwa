@@ -1,7 +1,8 @@
 /* global Ext, expect, jasmine, xit */
 
 describe("Ext.window.Window", function() {
-    var win, container;
+    var itNotIE8 = Ext.isIE8 ? xit : it,
+        win, container;
     
     function makeWindow(config, noShow) {
         config = Ext.apply({
@@ -1267,7 +1268,7 @@ describe("Ext.window.Window", function() {
                 expectFocused(cmp);
             });
 
-            it("should focus the window if the selector does not match", function() {
+            itNotIE8("should focus the window if the selector does not match", function() {
                 makeWindow({
                     defaultFocus: '#notthere',
                     defaultType: 'textfield',

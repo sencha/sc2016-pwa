@@ -263,6 +263,7 @@ Ext.define('Ext.ux.Gauge', {
     doDestroy: function () {
         var me = this;
 
+        clearTimeout(me.resizeTimerId);
         me.un('resize', 'onElementResize', me);
         me.stopAnimation();
         me.callParent();

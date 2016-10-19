@@ -21,7 +21,7 @@ Ext.define('Ext.slider.Thumb', {
             translatable: {
                 // use cssposition instead of csstransform so that themes can use transform
                 // scale to style the pressed state of the thumb (material)
-                translationMethod: 'cssposition'
+                type: 'cssposition'
             }
         },
 
@@ -52,7 +52,7 @@ Ext.define('Ext.slider.Thumb', {
         ie10: {
             draggable: {
                 translatable: {
-                    translationMethod: 'csstransform'
+                    type: 'csstransform'
                 }
             }
         }
@@ -200,7 +200,7 @@ Ext.define('Ext.slider.Thumb', {
             sizerElement = me.sizerElement;
 
         if (oldUi) {
-            sizerElement.removeCls(oldUi, sizerCls)
+            sizerElement.removeCls(oldUi, sizerCls);
         }
 
         if (ui) {

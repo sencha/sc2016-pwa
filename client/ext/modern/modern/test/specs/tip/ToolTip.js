@@ -3,8 +3,8 @@
 describe("Ext.tip.ToolTip", function() {
     var tip,
         target,
-        describeDesktop = Ext.is.Desktop ? describe : xdescribe,
-        itDesktop = Ext.is.Desktop ? it : xit;
+        describeNotTouch = Ext.supports.TouchEvents ? describe : xdescribe,
+        itNotTouch = Ext.supports.TouchEvents ? it : xit;
 
     function createTip(config) {
         config = Ext.apply({}, config, {target: target, width: 50, height: 50, html: 'X'});
@@ -119,7 +119,7 @@ describe("Ext.tip.ToolTip", function() {
             }, "ToolTip was never shown");
         });
 
-        itDesktop("should hide the tooltip after mousing out of the target element", function() {
+        itNotTouch("should hide the tooltip after mousing out of the target element", function() {
             runs(function() {
                 createTip({showDelay: 1, hideDelay: 15});
                 mouseOverTarget();
@@ -208,7 +208,7 @@ describe("Ext.tip.ToolTip", function() {
         });
     });
 
-    describeDesktop("trackMouse", function() {
+    describeNotTouch("trackMouse", function() {
         it("should move the tooltip along with the mouse if 'trackMouse' is true", function() {
             var x = target.getX(),
                 y = target.getY();

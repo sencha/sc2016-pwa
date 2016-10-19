@@ -623,6 +623,7 @@ Ext.define('Ext.event.publisher.Gesture', {
         me.gestureTargets = null;
         me.events = [];
         me.cancelEvents = [];
+        me.reEnterCount = 0;
 
         for (i = 0; i < ln; i++) {
             recognizer = recognizers[i];

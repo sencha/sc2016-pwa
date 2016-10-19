@@ -423,15 +423,19 @@ Ext.define('Ext.grid.Grid', {
         me.add(headerContainer);
     },
 
-    applyTitleBar: function(titleBar) {
-        if (titleBar && !titleBar.isComponent) {
-            titleBar = Ext.factory(titleBar, Ext.TitleBar);
+    applyTitleBar: function(titleBar, oldTitleBar) {
+        return Ext.factory(titleBar, Ext.TitleBar, oldTitleBar);
+    },
+
+    updateTitleBar: function(titleBar) {
+        if (titleBar && !titleBar.getTitle()) {
+            titleBar.setTitle(this.getTitle());
         }
-        return titleBar;
     },
 
     updateTitle: function(title) {
         var titleBar = this.getTitleBar();
+
         if (titleBar) {
             if (title) {
                 titleBar.setTitle(title);

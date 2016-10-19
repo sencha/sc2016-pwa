@@ -481,9 +481,7 @@ Ext.define('Ext.field.Input', {
      * @private
      */
     updateMaxLength: function(newMaxLength) {
-        if (!this.useManualMaxLength()) {
-            this.updateFieldAttribute('maxlength', newMaxLength);
-        }
+        this.updateFieldAttribute('maxlength', newMaxLength);
     },
 
     /**

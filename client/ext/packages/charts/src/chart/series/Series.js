@@ -799,7 +799,7 @@ Ext.define('Ext.chart.series.Series', {
             // to configuration. trackMouse uses the pointerEvent
             // If aligning to an element, it uses a currentTarget
             // flyweight which may be attached to any DOM element.
-            tooltip.handleAfterShow();
+            tooltip.realignToTarget();
         } else {
             tooltip.show();
         }

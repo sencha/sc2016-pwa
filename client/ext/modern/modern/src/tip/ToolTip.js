@@ -288,6 +288,24 @@ Ext.define('Ext.tip.ToolTip', {
         return (target && target.isComponent) ? target : this.callParent();
     },
 
+    updateAnchor: function() {
+        this.doRealignToTarget();
+    },
+
+    applyAlign: function(align) {
+        var lastChar = align[align.length - 1];
+
+        // Tooltips constrain themselves.
+        if (lastChar !== '?' && lastChar !== '!') {
+            align += '?';
+        }
+        return align;
+    },
+
+    updateAlign: function() {
+        this.doRealignToTarget();
+    },
+
     updateAllowOver: function(allowOver) {
         var me = this;
 
@@ -349,6 +367,15 @@ Ext.define('Ext.tip.ToolTip', {
         }
     },
 
+    /**
+     * Realign this tip to the current target if it is currently visible.
+     *
+     * @since 6.2.1
+     */
+    realignToTarget: function() {
+        this.doRealignToTarget();
+    },
+
     showBy: function(target, alignment, passedOptions) {
         var me = this,
             alignDelegate = me.getAlignDelegate();
@@ -357,7 +384,9 @@ Ext.define('Ext.tip.ToolTip', {
         if (target.isEvent) {
             me.alignToEvent(target);
         } else {
-            if (target.isElement) {
+            if (target.isWidget) {
+                me.updateCurrentTarget(target.element.dom);
+            } else if (target.isElement) {
                 me.updateCurrentTarget(target.dom);
             } else if (target.nodeType) {
                 me.updateCurrentTarget(target);
@@ -411,6 +440,8 @@ Ext.define('Ext.tip.ToolTip', {
     },
 
     privates: {
+        allowRealign: true,
+        
         onDocMouseDown: function(e) {
             var me = this,
                 delegate = me.getDelegate();
@@ -439,10 +470,6 @@ Ext.define('Ext.tip.ToolTip', {
             this.pointerEvent = e;
             this.updateCurrentTarget(newTarget);
             this.handleTargetOver();
-        },
-
-        getConstrainRegion: function() {
-            return this.callParent().adjust(5, -5, -5, 5);
         },
 
         onTargetOver: function(e) {
@@ -482,6 +509,7 @@ Ext.define('Ext.tip.ToolTip', {
                 // If users need to see show events on target change, we must hide.
                 if ((myListeners.beforeshow || myListeners.show) && me.isVisible()) {
                     me.hide();
+                    me.hiddenByTargetOver = me.isHidden();
                 }
 
                 me.forceTargetOver(e, newTarget);
@@ -560,11 +588,12 @@ Ext.define('Ext.tip.ToolTip', {
             me.clearTimer('hide');
             if (me.getHidden() && !me.showTimer) {
                 // Allow rapid movement from delegate to delegate to show immediately
-                if (me.getDelegate() && Ext.Date.getElapsed(me.lastHidden) < me.getQuickShowInterval()) {
+                if ((me.getDelegate() || me.hiddenByTargetOver) && Ext.Date.getElapsed(me.lastHidden) < me.getQuickShowInterval()) {
+                    me.hiddenByTargetOver = false;
                     me.showByTarget(target);
                 } else {
                     // If a tap event triggered, do not wait. Show immediately.
-                    me.showTimer = Ext.defer(me.showByTarget, me.pointerEvent.pointerType !== 'mouse' ? 0 : me.getShowDelay(), me, [target]);
+                    me.showTimer = Ext.defer(me.showByTarget, (!me.pointerEvent || me.pointerEvent.pointerType === 'mouse') ? me.getShowDelay() : 0, me, [target]);
                 }
             }
             else if (!me.getHidden() && me.getAutoHide() !== false) {
@@ -601,16 +630,10 @@ Ext.define('Ext.tip.ToolTip', {
                     overlap: me.getTrackMouse() && !me.getAnchor()
                 },
                 mouseOffset = me.getMouseOffset(),
-                target = event.getPoint().adjust(-mouseOffset[1], mouseOffset[0], mouseOffset[1], -mouseOffset[0]),
-                anchor = me.getAnchor(),
-                align;
+                target = event.getPoint().adjust(-Math.abs(mouseOffset[1]), Math.abs(mouseOffset[0]), Math.abs(mouseOffset[1]), -Math.abs(mouseOffset[0])),
+                align = me.getAnchor() ? me.getAlign() : null;
 
-            // The anchor must point to the mouse
-            if (me.getAnchor()) {
-                align = me.getAlign();
-            }
-
-            if (!align) {
+            if (!align && mouseOffset) {
                 if (mouseOffset[0] > 0) {
                     if (mouseOffset[1] > 0) {
                         align = 'tl-br?';
@@ -680,6 +703,16 @@ Ext.define('Ext.tip.ToolTip', {
 
             // Clip the anchor to the same bounds
             this.tipElement.clipTo(clippingRegion, sides);
+        },
+
+        doRealignToTarget: function() {
+            var me = this,
+                currentTarget = me.currentTarget,
+                dom = currentTarget && currentTarget.dom;
+
+            if (me.allowRealign && me.isVisible() && dom) {
+                me.showByTarget(dom);
+            }
         },
 
         updateCurrentTarget: function (dom) {
