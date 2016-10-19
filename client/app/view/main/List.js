@@ -33,12 +33,7 @@ Ext.define('PWA.view.main.List', {
             store: '{personnel}'
         },
 
-        plugins: [
-            {
-                xclass: 'Ext.plugin.PullRefresh',
-                pullText: 'Pull down to refresh'
-            }
-        ],
+        plugins: [new Ext.plugin.PullRefresh()],
 
         itemTpl: [
             '<div class="item-wrapper">',
