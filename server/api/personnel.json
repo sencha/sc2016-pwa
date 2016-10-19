@@ -300,7 +300,7 @@
             "username": "gautam.agrawal",
             "firstname": "Gautam",
             "lastname": "Agrawal",
-            "title": "Sr. Director, Product Management",
+            "title": "Sr. Director, Product Mgmt.",
             "phone": "(650) 299-9550",
             "extension": null,
             "skype": "gautam.agrawal",
@@ -313,47 +313,6 @@
             "updated": "2016-10-18T13:26:40.742Z",
             "office_id": "96edb1c4-04fe-463b-b8d0-346226a7b60e",
             "organization_id": "54a9d99e-42b6-420a-a005-b4d1363066d5",
-            "organization": {
-                "id": "54a9d99e-42b6-420a-a005-b4d1363066d5",
-                "name": "Market Development",
-                "created": "2016-10-18T13:26:38.301Z",
-                "updated": "2016-10-18T13:26:40.734Z",
-                "manager_id": "1d2dde71-d23e-4bf9-b41c-40bf2683eed0",
-                "headcount": 17,
-                "manager": {
-                    "id": "1d2dde71-d23e-4bf9-b41c-40bf2683eed0",
-                    "email": "mriley47@gizmodo.com",
-                    "username": "mary.riley",
-                    "firstname": "Mary",
-                    "lastname": "Riley",
-                    "title": "Senior Editor",
-                    "phone": "1-(661)227-1679",
-                    "extension": null,
-                    "skype": "mriley47",
-                    "linkedin": "mary.riley",
-                    "picture": "/portraits/women/97.jpg",
-                    "birthday": "1963-05-17",
-                    "started": "2013-05-07",
-                    "ended": "2015-06-20",
-                    "created": "2016-10-18T13:26:38.423Z",
-                    "updated": "2016-10-18T13:26:40.745Z",
-                    "office": {
-                        "location": {
-                            "latitude": -8.6903,
-                            "longitude": 121.626
-                        },
-                        "id": "7f667d85-e9e1-4b42-a9d0-ca4d39f8bdf2",
-                        "name": "Bayside",
-                        "address": "831 Del Mar Avenue",
-                        "postcode": null,
-                        "region": null,
-                        "city": "Boafeo",
-                        "country": "Indonesia",
-                        "created": "2016-10-18T13:26:38.295Z",
-                        "updated": "2016-10-18T13:26:38.295Z"
-                    }
-                }
-            },
             "office": {
                 "location": {
                     "latitude": 47.16663,

@@ -60,7 +60,7 @@ Ext.define('PWA.view.main.List', {
         },
 
         listeners: {
-            select: 'onItemSelected'
+            itemtap: 'onItemSelected'
         }
     }
 });
