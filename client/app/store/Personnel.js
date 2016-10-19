@@ -12,7 +12,6 @@ Ext.define('PWA.store.Personnel', {
     proxy: {
         type: 'ajax',
 
-        // @sw-precache { handler: "networkFirst", options: { cache: { name: "api" } } }
         url: '/personnel.json',
 
         reader: {
