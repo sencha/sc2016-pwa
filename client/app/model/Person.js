@@ -13,7 +13,6 @@ Ext.define('PWA.model.Person', {
         { name: 'birthday', type: 'date', dateFormat: 'Y-m-d' },
         { name: 'title', type: 'string' },
 
-        // @sw-precache { urlPattern: "\\/portraits\\/.*", handler: "networkFirst", options: { cache: { name: "images", maxEntries: 100 } } }
         { name: 'picture', type: 'string' },
         { name: 'started', type: 'date', dateFormat: 'Y-m-d' },
         { name: 'ended', type: 'date', dateFormat: 'Y-m-d' },
