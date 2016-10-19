@@ -16,7 +16,7 @@ Ext.define('PWA.view.main.Main', {
         'PWA.view.main.MainController',
         'PWA.view.main.MainModel'
     ],
-
+ 
     controller: 'main',
     viewModel: 'main',
     layout: 'fit',
