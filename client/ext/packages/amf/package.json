@@ -20,7 +20,7 @@
     "summary": "AMF Direct support",
     "detailedDescription": "Use AMF-based server (e.g. BlazeDS, Coldfusion) as data sources for grid. Also allows making RMI calls to the server using Direct.",
 
-    "version": "6.2.1.91",
+    "version": "6.2.1.92",
     "compatVersion": "6.0.0",
     "format": "1",
 

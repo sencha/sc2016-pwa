@@ -851,8 +851,8 @@ Ext.define('Ext.event.Event', {
     },
 
     /**
-     * Returns true if the target of this event is a child of `el`.  Unless the allowEl
-     * parameter is set, it will return false if if the target is `el`.
+     * Returns true if the target of this event is a child of `el`. If the allowEl
+     * parameter is set to false, it will return false if the target is `el`.
      * Example usage:
      * 
      *     // Handle click on any child of an element
@@ -872,17 +872,22 @@ Ext.define('Ext.event.Event', {
      * @param {String/HTMLElement/Ext.dom.Element} el The id, DOM element or Ext.Element to check
      * @param {Boolean} [related] `true` to test if the related target is within el instead
      * of the target
-     * @param {Boolean} [allowEl] `true` to also check if the passed element is the target
-     * or related target
+     * @param {Boolean} [allowEl=true] `true` to allow the target to be considered "within" itself. 
+     * `false` to only allow child elements.
      * @return {Boolean}
      */
-    within: function(el, related, allowEl){
+    within: function(el, related, allowEl) {
         var t;
+
         if (el) {
             t = related ? this.getRelatedTarget() : this.getTarget();
         }
 
-        return t ? Ext.fly(el).contains(t) || !!(allowEl && t === Ext.getDom(el)) : false;
+        if (!t || (allowEl === false && t === Ext.getDom(el))) {
+            return false;
+        }
+
+        return Ext.fly(el).contains(t);
     },
 
     deprecated: {
