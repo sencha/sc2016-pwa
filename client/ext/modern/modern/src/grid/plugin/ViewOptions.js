@@ -100,7 +100,7 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
             exit: 'right',
             modal: true,
             translatable: {
-                translationMethod: 'csstransform'
+                type: 'csstransform'
             },
             right: 0,
             layout: 'fit',

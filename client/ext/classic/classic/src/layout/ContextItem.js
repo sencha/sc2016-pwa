@@ -787,7 +787,7 @@ Ext.define('Ext.layout.ContextItem', {
     flushAnimations: function() {
         var me = this,
             animateFrom = me.previousSize,
-            target, targetAnim, duration, animateProps, anim,
+            target, animQueue, targetAnim, duration, animateProps, anim,
             changeCount, j, propsLen, propName, oldValue, newValue;
 
         // Only animate if the Component has been previously layed out: first layout should not animate
@@ -830,7 +830,8 @@ Ext.define('Ext.layout.ContextItem', {
                     me.writeProps(anim.from);
                 }
                 me.el.animate(anim);
-                anim = Ext.fx.Manager.getFxQueue(me.el.id)[0];
+                animQueue = Ext.fx.Manager.getFxQueue(me.el.id);
+                anim = animQueue[animQueue.length - 1];
                 target.$layoutAnim = anim;
 
                 anim.on({

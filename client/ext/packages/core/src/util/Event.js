@@ -107,7 +107,7 @@ Ext.define('Ext.util.Event', function() {
                 // be done in Ext.Element's doAddListener override, but since there are
                 // multiple paths for listener removal (un, clearListeners), it is best
                 // to keep all subscribe/unsubscribe logic here.
-                observable._getPublisher(eventName).subscribe(
+                observable._getPublisher(eventName, options.translate === false).subscribe(
                     observable,
                     eventName,
                     options.delegated !== false,
@@ -292,7 +292,7 @@ Ext.define('Ext.util.Event', function() {
                 }
     
                 if (observable.isElement) {
-                    observable._getPublisher(eventName).unsubscribe(
+                    observable._getPublisher(eventName, options.translate === false).unsubscribe(
                         observable,
                         eventName,
                         options.delegated !== false,
@@ -389,8 +389,10 @@ Ext.define('Ext.util.Event', function() {
                         // This is more efficient than creating a new event object, and we
                         // don't want to change the type of the original event because it may
                         // be used asynchronously by other handlers
+                        // Translated events are not gestures. They must appear to be
+                        // atomic events, so that they can be stopped.
                         chained = e;
-                        e = args[0] = chained.chain({ type: type });
+                        e = args[0] = chained.chain({ type: type, isGesture: false });
                     }
 
                     // In Ext4 Ext.EventObject was a singleton event object that was reused as events

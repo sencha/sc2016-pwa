@@ -128,17 +128,19 @@ Ext.define('Ext.picker.Date', {
     },
 
     initialize: function() {
-        this.callParent();
+        var me = this;
 
-        this.on({
-            scope: this,
+        me.callParent();
+
+        me.on({
+            scope: me,
             delegate: '> slot',
-            slotpick: this.onSlotPick
+            slotpick: me.onSlotPick
         });
 
-        this.on({
-            scope: this,
-            show: this.onSlotPick
+        me.on({
+            scope: me,
+            show: me.onSlotPick
         });
     },
 

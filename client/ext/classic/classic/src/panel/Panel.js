@@ -1238,7 +1238,10 @@ Ext.define('Ext.panel.Panel', {
 
     doDestroy: function() {
         var me = this;
-        
+
+        if (me.slideOutTask) {
+            me.slideOutTask.cancel();
+        }
         Ext.destroy(
             me.placeholder,
             me.ghostPanel,

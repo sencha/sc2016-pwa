@@ -214,6 +214,9 @@ Ext.define('Ext.scroll.Scroller', {
     destroy: function() {
         var me = this;
 
+        clearTimeout(me.restoreTimer);
+        clearTimeout(me.onDomScrollEnd.timer);
+
         // Clear any overflow styles
         me.setX(Ext.emptyString);
         me.setY(Ext.emptyString);
@@ -1315,7 +1318,8 @@ Ext.define('Ext.scroll.Scroller', {
                 position, x, y;
 
             position = me.updateDomScrollPosition();
-            if (me.restoring) {
+            if (me.restoreTimer) {
+                clearTimeout(me.onDomScrollEnd.timer);
                 return;
             }
 
@@ -1396,10 +1400,11 @@ Ext.define('Ext.scroll.Scroller', {
                     // while ensuring we maintain the correct internal state. 50ms is
                     // enough to capture the async scroll events, anything after that
                     // we re-enable.
-                    me.restoring = true;
-                    Ext.defer(function() {
-                        me.restoring = false;
-                    }, 50);
+                    if (!me.restoreTimer) {
+                            me.restoreTimer = Ext.defer(function() {
+                            me.restoreTimer = null;
+                        }, 50);
+                    }
                     me.doScrollTo(me.trackingScrollLeft, me.trackingScrollTop, false);
 
                     // Do not discard the state.

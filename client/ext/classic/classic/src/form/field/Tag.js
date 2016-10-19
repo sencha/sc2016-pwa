@@ -674,6 +674,13 @@ Ext.define('Ext.form.field.Tag', {
         return data;
     },
 
+    onRender: function(container, index) {
+        var me = this;
+
+        me.callParent([container, index]);
+        me.emptyClsElements.push(me.listWrapper, me.placeholderLabel);
+    },
+
     afterRender: function() {
         var me = this,
             inputEl = me.inputEl,
@@ -690,8 +697,7 @@ Ext.define('Ext.form.field.Tag', {
         me.applyAriaListMarkup();
         me.applyAriaSelectedText();
 
-        me.callParent(arguments);
-        me.emptyClsElements.push(me.listWrapper, me.placeholderLabel);
+        me.callParent();
     },
 
     findRecord: function(field, value) {

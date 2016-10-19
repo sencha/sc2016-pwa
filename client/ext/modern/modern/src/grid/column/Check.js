@@ -18,7 +18,7 @@ Ext.define('Ext.grid.column.Check', {
      * @param {Ext.grid.cell.Check} The cell changing its state.
      * @param {Number} rowIndex The row index.
      * @param {Boolean} checked `true` if the box is to be checked.
-     * @param {Ext.data.Model} The record to be updated.
+     * @param {Ext.data.Model} record The record to be updated.
      * @param {Ext.event.Event} e The underlying event which caused the check change.
      * @param {Ext.grid.CellContext} e.position A {@link Ext.grid.CellContext CellContext} object
      * containing all contextual information about where the event was triggered.
@@ -30,7 +30,7 @@ Ext.define('Ext.grid.column.Check', {
      * @param {Ext.grid.cell.Check} The cell changing its state.
      * @param {Number} rowIndex The row index.
      * @param {Boolean} checked `true` if the box is now checked.
-     * @param {Ext.data.Model} The record which was updated.
+     * @param {Ext.data.Model} record The record which was updated.
      * @param {Ext.event.Event} e The underlying event which caused the check change.
      * @param {Ext.grid.CellContext} e.position A {@link Ext.grid.CellContext CellContext} object
      */

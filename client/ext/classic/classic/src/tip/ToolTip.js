@@ -390,7 +390,7 @@ Ext.define('Ext.tip.ToolTip', {
         if (!me.anchorSize) {
             anchorEl.addCls(Ext.baseCSSPrefix + 'tip-anchor-top');
             anchorEl.show();
-            me.anchorSize = new Ext.util.Offset(anchorEl.getWidth(), anchorEl.getHeight());
+            me.anchorSize = new Ext.util.Offset(anchorEl.getWidth(false, true), anchorEl.getHeight(false, true));
             anchorEl.removeCls(Ext.baseCSSPrefix + 'tip-anchor-top');
             anchorEl.hide();
         }
@@ -404,7 +404,7 @@ Ext.define('Ext.tip.ToolTip', {
         // element, so we should show offset from the mouse.
         // If we are being shown programatically, use 0, 0
         else {
-            target = me.pointerEvent ? me.pointerEvent.getPoint().adjust(-mouseOffset[1], mouseOffset[0], mouseOffset[1], -mouseOffset[0]) : new Ext.util.Point();
+            target = me.pointerEvent ? me.pointerEvent.getPoint().adjust(-Math.abs(mouseOffset[1]), Math.abs(mouseOffset[0]), Math.abs(mouseOffset[1]), -Math.abs(mouseOffset[0])) : new Ext.util.Point();
             if (!me.anchor) {
                 overlap = true;
                 if (mouseOffset[0] > 0) {
@@ -429,8 +429,8 @@ Ext.define('Ext.tip.ToolTip', {
             target: target,
             overlap: overlap,
             offset: me.targetOffset,
-            inside: me.constrainPosition ? Ext.getBody().getRegion().adjust(5, -5, -5, 5) : null
-        }
+            inside: me.constrainPosition ? (me.constrainTo || Ext.getBody().getRegion().adjust(5, -5, -5, 5)) : null
+        };
 
         if (me.anchor) {
             alignSpec.anchorSize = me.anchorSize;
@@ -567,7 +567,7 @@ Ext.define('Ext.tip.ToolTip', {
         if (!me.disabled) {
             me.fireEvent('hovertarget', me, me.currentTarget, me.currentTarget.dom);
             if (me.isVisible()) {
-                me.handleAfterShow();
+                me.realignToTarget();
             } else {
                 me.triggerElement = me.currentTarget.dom;
                 me.fromDelayShow = true;
@@ -633,10 +633,15 @@ Ext.define('Ext.tip.ToolTip', {
      */
     afterShow: function () {
         this.callParent();
-        this.handleAfterShow();
+        this.realignToTarget();
     },
 
-    handleAfterShow: function() {
+    /**
+     * Realign this tooltip to the {@link #cfg-target}.
+     *
+     * @since 6.2.1
+     */
+    realignToTarget: function() {
         var me = this;
         me.clearTimers();
 
@@ -653,10 +658,14 @@ Ext.define('Ext.tip.ToolTip', {
      * @param {Ext.Component/Ext.dom.Element} target The {@link Ext.Component} or {@link Ext.dom.Element} to show this ToolTip by.
      */
     showBy: function(target) {
-        this.align = this.defaultAlign;
-        this.currentTarget.attach(Ext.getDom(target.el || target));
-        this.triggerElement = this.currentTarget.dom;
-        this.show();
+        var me = this;
+
+        me.align = me.defaultAlign;
+        me.currentTarget.attach(Ext.getDom(target.el || target));
+        me.triggerElement = me.currentTarget.dom;
+        me.show();
+
+        return me;
     },
 
     _timerNames: {},
@@ -689,6 +698,7 @@ Ext.define('Ext.tip.ToolTip', {
         me.clearTimer('show');
         me.clearTimer('dismiss');
         me.clearTimer('hide');
+        me.clearTimer('enable');
     },
     
     onShow: function() {
@@ -710,7 +720,7 @@ Ext.define('Ext.tip.ToolTip', {
         var me = this;
         if (!me.closable && !e.within(me.el.dom)) {
             me.disable();
-            Ext.defer(me.doEnable, 100, me);
+            me.enableTimer = Ext.defer(me.doEnable, 100, me);
         }
     },
 

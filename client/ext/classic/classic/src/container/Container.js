@@ -965,6 +965,11 @@ Ext.define('Ext.container.Container', {
                     me.fireEvent('add', me, item, pos);
                 }
             }
+
+            // This flag may be set by onBeforeAdd to tell the layout system that any remove is temporary
+            // and that focus should not be reverted because Ext.layout.Layout#moveItem will be
+            // moving things into place soon, and that will handle keeping focus stable.
+            item.isLayoutMoving = false;
         }
 
         // We need to update our layout after adding all passed items
@@ -1702,10 +1707,14 @@ Ext.define('Ext.container.Container', {
      * @protected
      */
     onBeforeAdd: function(item) {
-        // Remove from current container if it's not us.
+        // Remove from current container without detaching it from the DOM if it's not us.
         var owner = item.ownerCt;
         if (owner && owner !== this) {
-            owner.remove(item, false);
+            item.isLayoutMoving = true;
+            owner.remove(item, {
+                destroy: false,
+                detach: false
+            });
         }
     },
 
@@ -2025,7 +2034,7 @@ Ext.define('Ext.container.Container', {
 
         // Detach a component from the DOM
         detachComponent: function(component){
-            Ext.getDetachedBody().appendChild(component.getEl());
+            Ext.getDetachedBody().appendChild(component.getEl(), true);
         },
 
         /**

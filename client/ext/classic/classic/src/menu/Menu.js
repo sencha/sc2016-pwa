@@ -643,6 +643,7 @@ Ext.define('Ext.menu.Menu', {
             me.escapeKeyNav.destroy();
         }
 
+        me.itemOverTask.cancel();
         me.parentMenu = me.ownerCmp = me.escapeKeyNav = null;
         
         if (me.rendered) {
@@ -694,7 +695,11 @@ Ext.define('Ext.menu.Menu', {
         if (item) {
             // Activate the item in time specified by mouseLeaveDelay.
             // If we mouseout, or move to another item this invocation will be canceled.
-            me.itemOverTask.delay(me.mouseLeaveDelay, null, null, [e, item]);
+            if (e.pointerType === 'touch') {
+                me.handleItemOver(e, item);
+            } else {
+                me.itemOverTask.delay(me.mouseLeaveDelay, null, null, [e, item]);
+            }
         }
         if (mouseEnter) {
             me.fireEvent('mouseenter', me, e);

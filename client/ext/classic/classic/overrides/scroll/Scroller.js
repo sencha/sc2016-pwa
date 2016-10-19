@@ -77,6 +77,8 @@ Ext.define(null, {
                         // will fire the event.
                         +dom.scrollLeft;
                         dom.scrollLeft = x;
+                        +dom.scrollTop;
+                        dom.scrollTop = y;
                     }
                 }
 

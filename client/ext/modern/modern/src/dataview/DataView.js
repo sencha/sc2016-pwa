@@ -527,7 +527,8 @@ Ext.define('Ext.dataview.DataView', {
             else {
                 me.on({
                     painted: 'refresh',
-                    single: true
+                    single: true,
+                    scope: me
                 });
             }
         }
@@ -939,6 +940,8 @@ Ext.define('Ext.dataview.DataView', {
         }
         if (me.initialized && container) {
             me.fireAction('refresh', [me], 'doRefresh');
+        } else {
+           me.onInitialized(me.refresh, me);
         }
     },
 

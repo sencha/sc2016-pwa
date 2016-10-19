@@ -952,7 +952,8 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
          * @private
          */
         onColumnsChanged: function() {
-            var selData = this.selected,
+            var me = this,
+                selData = me.selected,
                 rowRange,
                 colCount,
                 colIdx,
@@ -970,12 +971,16 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                     context = new Ext.grid.CellContext(view);
                     rowRange = selData.getRowRange();
                     colCount = view.getVisibleColumnManager().getColumns().length;
-                    for (rowIdx = rowRange[0]; rowIdx <= rowRange[1]; rowIdx++) {
-                        context.setRow(rowIdx);
-                        for (colIdx = 0; colIdx < colCount; colIdx++) {
-                            context.setColumn(colIdx);
-                            view.onCellDeselect(context);
+                    if (colCount) {
+                        for (rowIdx = rowRange[0]; rowIdx <= rowRange[1]; rowIdx++) {
+                            context.setRow(rowIdx);
+                            for (colIdx = 0; colIdx < colCount; colIdx++) {
+                                context.setColumn(colIdx);
+                                view.onCellDeselect(context);
+                            }
                         }
+                    } else {
+                        me.clearSelections();
                     }
                 }
 
@@ -984,7 +989,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                     selectionChanged = false;
                     selData.eachColumn(function(column, columnIdx) {
                         if (!column.isVisible() || !view.ownerGrid.isAncestor(column)) {
-                            this.remove(column);
+                            me.remove(column);
                             selectionChanged = true;
                         }
                     });
@@ -994,7 +999,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
             // This event is fired directly from the HeaderContainer before the view updates.
             // So we have to wait until idle to update the selection UI.
             // NB: fireSelectionChange calls updateSelectionExtender after firing its event.
-            Ext.on('idle', selectionChanged ? this.fireSelectionChange : this.updateSelectionExtender, this, {
+            Ext.on('idle', selectionChanged ? me.fireSelectionChange : me.updateSelectionExtender, me, {
                 single: true
             });
         },
@@ -1310,8 +1315,8 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                     }
                 }
 
-                // Disable until a valid new selection is announced in fireSelectionChange
-                if (me.extensible) {
+                // Disable until a valid new selection is announced in fireSelectionChange unless it's a click
+                if (me.extensible && !e.position.isEqual(me.mousedownPosition)) {
                     me.extensible.disable();
                 }
 

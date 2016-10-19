@@ -499,7 +499,8 @@ Ext.define('Ext.LoadMask', {
     hide: function() {
         var me = this,
             ownerCt = me.ownerCt;
-        
+
+        me.target.removeCls(Ext.baseCSSPrefix + "masked");
         // Element support to be deprecated
         if (me.isElement) {
             ownerCt.unmask();
@@ -521,11 +522,11 @@ Ext.define('Ext.LoadMask', {
     show: function() {
         var me = this;
 
+        me.target.addCls(Ext.baseCSSPrefix + "masked");
         // Element support to be deprecated
         if (me.isElement) {
             me.ownerCt.mask(this.useMsg ? this.msg : '', this.msgCls);
             me.fireEvent('show', this);
-            
             return;
         }
 

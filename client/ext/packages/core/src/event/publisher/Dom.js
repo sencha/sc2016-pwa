@@ -149,7 +149,12 @@ Ext.define('Ext.event.publisher.Dom', {
             }
         }
 
-        Ext.getWin().on('unload', me.destroy, me);
+        // DOM publishers should be the last thing to go since they are used
+        // to remove any element listeners which is typically part
+        // of the unload destroy process.
+        Ext.getWin().on('unload', me.destroy, me, {
+            priority: -10000
+        });
     },
 
     initHandlers: function() {

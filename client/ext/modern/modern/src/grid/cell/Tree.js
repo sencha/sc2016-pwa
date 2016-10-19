@@ -9,7 +9,6 @@ Ext.define('Ext.grid.cell.Tree', {
 
     collapsedCls: Ext.baseCSSPrefix + 'treelist-item-collapsed',
     expandedCls: Ext.baseCSSPrefix + 'treelist-item-expanded',
-    floatedCls: Ext.Widget.prototype.floatedCls + ' ' + Ext.baseCSSPrefix + 'treelist-item-floated',
     floatedToolCls: Ext.baseCSSPrefix + 'treelist-item-tool-floated',
     leafCls: Ext.baseCSSPrefix + 'treelist-item-leaf',
     expandableCls: Ext.baseCSSPrefix + 'treelist-item-expandable',
@@ -260,4 +259,9 @@ Ext.define('Ext.grid.cell.Tree', {
             record[fn]();
         }
     }
+}, function(TreeCell) {
+    TreeCell.prototype.floatedCls = [
+        Ext.Widget.prototype.floatedCls,
+        Ext.baseCSSPrefix + 'treelist-item-floated'
+    ];
 });

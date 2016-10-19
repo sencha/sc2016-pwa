@@ -393,15 +393,16 @@ Ext.define('Ext.form.Panel', {
     },
 
     updateSubmitOnAction: function(newSubmitOnAction) {
+        var me = this;
         if (newSubmitOnAction) {
-            this.on({
+            me.on({
                 action: 'onFieldAction',
-                scope: this
+                scope: me
             });
         } else {
-            this.un({
+            me.un({
                 action: 'onFieldAction',
-                scope: this
+                scope: me
             });
         }
     },

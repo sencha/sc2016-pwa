@@ -383,7 +383,9 @@ Ext.define('Ext.selection.CheckboxModel', {
             menuDisabled: true,
             checkOnly: me.checkOnly,
             checkboxAriaRole: 'presentation',
-            tdCls: me.tdCls,
+            // Firefox needs pointer-events: none on the checkbox span with checkOnly: true
+            // to work around focusing issues
+            tdCls: (me.checkOnly ? Ext.baseCSSPrefix + 'selmodel-checkonly ' : '') + me.tdCls,
             cls: Ext.baseCSSPrefix + 'selmodel-column',
             editRenderer: me.editRenderer || me.renderEmpty,            
             locked: me.hasLockedHeader(),

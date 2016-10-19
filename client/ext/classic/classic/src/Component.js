@@ -4447,6 +4447,7 @@ Ext.define('Ext.Component', {
      * Allows addition of behavior to the destroy operation.
      *
      * @template
+     * @method
      * @protected
      */
     onDestroy: Ext.emptyFn,
@@ -6075,7 +6076,7 @@ Ext.define('Ext.Component', {
             // in the pool when they are not needed in the grid.
             //
             // Also see reattachToBody
-            Ext.getDetachedBody().appendChild(this.el);
+            Ext.getDetachedBody().appendChild(this.el, true);
             Ext.Component.cancelLayout(this);
             this.isDetached = true;
         },

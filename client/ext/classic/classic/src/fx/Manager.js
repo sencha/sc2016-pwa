@@ -389,5 +389,16 @@ Ext.define('Ext.fx.Manager', {
                 }
             }
         }
+    },
+    
+    clear: function() {
+        var me = this;
+
+        if (me.taskRunner) {
+            me.taskRunner.stopAll(true);
+        }
+        me.targetArr = {};
+        me.items.clear();
+        me.targets.clear();
     }
 });

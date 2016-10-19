@@ -3,7 +3,7 @@
 describe("Ext.util.Floating", function() {
     var component,
         describeGoodBrowsers = Ext.isWebKit || Ext.isGecko || Ext.isChrome ? describe : xdescribe,
-        itNotTouch = Ext.supports.TouchEvents ? xit : it;
+        itNotTouch = jasmine.supportsTouch ? xit : it;
 
     function makeComponent(cfg){
         component = new Ext.Component(Ext.apply({
@@ -216,7 +216,7 @@ describe("Ext.util.Floating", function() {
 
         it("should hide the shadow during animations", function() {
             var animationDone = false,
-                shadow, shadowEl;
+                shadow, shadowEl, shadowHideSpy;
 
             makeComponent({
                 width: 200,
@@ -230,6 +230,7 @@ describe("Ext.util.Floating", function() {
             shadowEl = shadow.el;
 
             expect(shadowEl.isVisible()).toBe(true);
+            shadowHideSpy = spyOn(shadowEl, 'hide').andCallThrough();
 
             component.el.setXY([350, 400], {
                 duration: 200,
@@ -240,23 +241,20 @@ describe("Ext.util.Floating", function() {
                 }
             });
 
-            waitsFor(function() {
-                return !shadow.el && !shadowEl.isVisible();
-            }, "Shadow was never hidden", 150);
+            waitsForSpy(shadowHideSpy, "shadow to be hidden for animation");
 
             waitsFor(function() {
-                return animationDone;
-            }, "Animation never completed", 300);
+                return animationDone && shadow.el && shadow.el.isVisible();
+            }, 'shadow to be shown after animation finishes');
 
             runs(function() {
-                expect(shadow.el.isVisible()).toBe(true);
                 
                 // IE8 does shadows the hard way
                 expect(shadow.el.getX()).toBe(Ext.isIE8 ? 345 : 350);
                 expect(shadow.el.getY()).toBe(Ext.isIE8 ? 397 : 404);
                 
                 // FFWindows gets this off by one
-                expect(shadow.el.getWidth()).toBe(Ext.isIE8 ? 209 : 200);
+                expect(shadow.el.getWidth()).toBeApprox(Ext.isIE8 ? 209 : 200, 1);
                 expect(shadow.el.getHeight()).toBe(Ext.isIE8 ? 107 : 96);
             });
         });
@@ -266,7 +264,9 @@ describe("Ext.util.Floating", function() {
                 shadow;
 
             makeComponent({
-                animateShadow: true,
+                animateShadow: {
+                    duration: 100
+                },
                 width: 200,
                 height: 100,
                 x: 100,
@@ -300,7 +300,7 @@ describe("Ext.util.Floating", function() {
                 // IE8 does shadows the hard way
                 expect(shadow.el.getX()).toBe(Ext.isIE8 ? 345 : 350);
                 expect(shadow.el.getY()).toBe(Ext.isIE8 ? 397 : 404);
-                expect(shadow.el.getWidth()).toBe(Ext.isIE8 ? 209: 200);
+                expect(shadow.el.getWidth()).toBeApprox(Ext.isIE8 ? 209: 200, 1);
                 expect(shadow.el.getHeight()).toBe(Ext.isIE8 ? 107 : 96);
             });
         });

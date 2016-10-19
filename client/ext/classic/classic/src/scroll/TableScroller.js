@@ -6,7 +6,7 @@ Ext.define('Ext.scroll.TableScroller', {
         lockingScroller: null
     },
 
-    private: {
+    privates: {
         doScrollTo: function(x, y, animate) {
             var lockingScroller;
 

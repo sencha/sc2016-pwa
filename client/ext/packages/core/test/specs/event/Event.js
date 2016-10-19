@@ -1,3 +1,5 @@
+/* global Ext, expect, jasmine */
+
 describe("Ext.event.Event", function() {
     var E = Ext.event.Event,
         e;

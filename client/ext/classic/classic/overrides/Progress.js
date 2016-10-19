@@ -15,5 +15,15 @@ Ext.define('Ext.overrides.Progress', {
         width -= me.element.getBorderWidth('lr');
         me.backgroundEl.setWidth(width);
         me.textEl.setWidth(width);
+    },
+
+    privates: {
+        startBarAnimation: function(o) {
+            this.barEl.animate(o);
+        },
+
+        stopBarAnimation: function() {
+            this.barEl.stopAnimation();
+        }
     }
 });

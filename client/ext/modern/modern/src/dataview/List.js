@@ -479,8 +479,10 @@ Ext.define('Ext.dataview.List', {
                 me.refresh();
             } else {
                 me.on({
+                    scope: me,
                     painted: 'refresh',
-                    single: true
+                    single: true,
+                    scope: me
                 });
             }
         }
@@ -873,7 +875,7 @@ Ext.define('Ext.dataview.List', {
         if (header) {
             if (infinite) {
                 header.setTranslatable({
-                    translationMethod: this.translationMethod
+                    type: this.translationMethod
                 });
                 me.translate(header, 0, -10000);
 
@@ -1228,8 +1230,10 @@ Ext.define('Ext.dataview.List', {
         if (!me.isPainted()) {
             if (!me._fireResizeOnNextPaint) {
                 me.on({
+                    scope: me,
                     painted: 'refresh',
-                    single: true
+                    single: true,
+                    scope: me
                 });
                 me._fireResizeOnNextPaint = true;
             }
@@ -1637,7 +1641,7 @@ Ext.define('Ext.dataview.List', {
 
         if (me.getInfinite()) {
             config.translatable = {
-                translationMethod: this.translationMethod
+                type: this.translationMethod
             };
         }
 
@@ -1737,7 +1741,7 @@ Ext.define('Ext.dataview.List', {
 
                 item.addCls(me.scrollDockCls);
                 item.setTranslatable({
-                    translationMethod: this.translationMethod
+                    type: this.translationMethod
                 });
                 me.translate(item, 0, -10000);
                 item.$scrollDockHeight = 0;
@@ -1923,7 +1927,7 @@ Ext.define('Ext.dataview.List', {
         pinnedHeader = Ext.apply(pinnedHeader, {
             list: me,
             translatable: {
-                translationMethod: me.translationMethod
+                type: me.translationMethod
             }
         });
 

@@ -29,7 +29,7 @@
 }
 
 .x-button-icon.x-shown {
-    display: block;
+    @include st-box;
 }
 
 .x-button-icon.x-hidden {

@@ -19,7 +19,7 @@ Ext.define('Ext.grid.plugin.SummaryRow', {
         emptyText: '',
         docked: 'bottom',
         translatable: {
-            translationMethod: 'csstransform'
+            type: 'csstransform'
         }
     },
 

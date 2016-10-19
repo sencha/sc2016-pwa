@@ -44,7 +44,7 @@ Ext.define('Ext.view.AbstractView', {
      * @private
      * Used for buffered rendering.
      */
-    renderBuffer: document.createElement('div'),
+    renderBuffer: new Ext.dom.Fly(document.createElement('div')),
 
     statics: {
         /**
@@ -1185,7 +1185,7 @@ Ext.define('Ext.view.AbstractView', {
             nodes, len, i;
 
         me.tpl.overwrite(div, me.collectData(records, index));
-        nodes = Ext.fly(div).query(me.getItemSelector());
+        nodes = div.query(me.getItemSelector());
         for (i = 0, len = nodes.length; i < len; i++) {
             result.appendChild(nodes[i]);
         }
@@ -1708,7 +1708,7 @@ Ext.define('Ext.view.AbstractView', {
 
         // If this refresh event is fire from a store load, then use the 
         // preserveScrollOnReload setting to decide whether to preserve scroll position
-        if (store.loadCount > me.lastRefreshLoadCount) {
+        if (store.loadCount > (me.lastRefreshLoadCount || 0)) {
             me.preserveScrollOnRefresh = me.preserveScrollOnReload;
         }
         me.refreshView();
@@ -1718,9 +1718,9 @@ Ext.define('Ext.view.AbstractView', {
 
     refreshView: function(startIndex) {
         var me = this,
-            // If we have an ancestor in a non-boxready state (collapsed or in-transition, or hidden), then block the
+            // If we have an ancestor in a non-boxready state (collapsed or about to collapse, or hidden), then block the
             // refresh because the next layout will trigger the refresh
-            blocked = me.blockRefresh || !me.rendered || me.up('[collapsed],[isCollapsingOrExpanding],[hidden]'),
+            blocked = me.blockRefresh || !me.rendered || me.up('[collapsed],[isCollapsingOrExpanding=1],[hidden]'),
             bufferedRenderer = me.bufferedRenderer;
 
         // If we are blocked in any way due to either a setting, or hidden or collapsed, or animating ancestor, then

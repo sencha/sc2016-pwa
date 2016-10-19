@@ -152,11 +152,16 @@ $checkboxfield-disabled-checkbox-color: dynamic(null);
             );
         }
 
+        .#{$prefix}input.#{$prefix}disabled {
+            color: $disabled-checkbox-color;
+        }
+
         &.#{$prefix}checked .#{$prefix}input {
             @include icon($checked-checkbox-icon);
             color: $checked-checkbox-color;
 
             &.#{$prefix}disabled {
+                // repeat disabled color here so it takes precedence
                 color: $disabled-checkbox-color;
             }
         }

@@ -294,79 +294,14 @@ Ext.define('Ext.viewport.Default', new function() {
         },
 
         render: function() {
-            if (!this.rendered) {
-                var body = Ext.getBody(),
-                    clsPrefix = Ext.baseCSSPrefix,
-                    classList = [],
-                    osEnv = Ext.os,
-                    osName = osEnv.name.toLowerCase(),
-                    browserName = Ext.browser.name.toLowerCase(),
-                    osMajorVersion = osEnv.version.getMajor(),
-                    theme;
+            var me = this,
+                body = Ext.getBody();
 
-                this.renderTo(body);
+            if (!me.rendered) {
+                me.renderTo(body);
 
-                classList.push(clsPrefix + osEnv.deviceType.toLowerCase());
-
-                if (osEnv.is.iPad) {
-                    classList.push(clsPrefix + 'ipad');
-                }
-
-                classList.push(clsPrefix + osName);
-                classList.push(clsPrefix + browserName);
-
-                if (Ext.browser.is.Safari && Ext.browser.version.isLessThan(9)) {
-                    classList.push(clsPrefix + 'safari8m');
-                }
-                if (Ext.toolkit) {
-                    classList.push(clsPrefix + Ext.toolkit);
-                }
-
-                if (osMajorVersion) {
-                    classList.push(clsPrefix + osName + '-' + osMajorVersion);
-                }
-
-                if (osEnv.is.BlackBerry) {
-                    classList.push(clsPrefix + 'bb');
-                    if (Ext.browser.userAgent.match(/Kbd/gi)) {
-                        classList.push(clsPrefix + 'bb-keyboard');
-                    }
-                }
-
-                if (Ext.browser.is.WebKit) {
-                    classList.push(clsPrefix + 'webkit');
-                }
-
-                if (Ext.browser.is.WebView) {
-                    classList.push(clsPrefix + 'webview');
-                }
-
-                if (Ext.browser.is.Standalone) {
-                    classList.push(clsPrefix + 'standalone');
-                }
-
-                if (Ext.browser.is.AndroidStock) {
-                    classList.push(clsPrefix + 'android-stock');
-                }
-
-                if (Ext.browser.is.GoogleGlass) {
-                    classList.push(clsPrefix + 'google-glass');
-                }
-
-                this.setOrientation(this.determineOrientation());
-                classList.push(clsPrefix + this.getOrientation());
-
-                if(Ext.os.is.iOS && Ext.browser.is.WebView && !Ext.browser.is.Standalone) {
-                    classList.push(clsPrefix + 'ios-native');
-                }
-
-                body.addCls(classList);
-
-                theme = Ext.theme;
-                if (theme && theme.getDocCls) {
-                    // hook for theme overrides to add css classes to the <html> element
-                    Ext.fly(document.documentElement).addCls(theme.getDocCls());
-                }
+                me.setOrientation(me.determineOrientation());
+                Ext.getBody().addCls(Ext.baseCSSPrefix + me.getOrientation());
             }
         },
 
@@ -878,9 +813,7 @@ Ext.define('Ext.viewport.Default', new function() {
             }
 
             if (menu.$reveal) {
-                if (Ext.browser.getPreferredTranslationMethod() !== 'scrollposition') {
-                    menu.translate(0, 0);
-                }
+                menu.translate(0, 0);
             } else {
                 menu.translate(before.translateX, before.translateY);
             }
@@ -1139,9 +1072,7 @@ Ext.define('Ext.viewport.Default', new function() {
             }
 
             if (menu.$reveal) {
-                if (Ext.browser.getPreferredTranslationMethod() != 'scrollposition') {
-                    menu.translate(0, 0);
-                }
+                menu.translate(0, 0);
             } else {
                 menu.translate(after.translateX, after.translateY);
             }

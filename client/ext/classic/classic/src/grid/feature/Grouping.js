@@ -1113,9 +1113,7 @@ Ext.define('Ext.grid.feature.Grouping', {
      * @private
      */
     onGroupMousedown: function(view, rowElement, groupName, e) {
-        if (e.pointerType === 'mouse') {
-            e.preventDefault();
-        }
+        e.preventDefault();
     },
 
     /**

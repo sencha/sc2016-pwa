@@ -196,6 +196,36 @@ describe("Ext.tree.TreeGrid", function() {
 
         Ext.destroy(tree);
     });
+
+    describe('tabbability', function() {
+        it('should keep all elements untabbable when not in actionable mode', function() {
+            makeTreeGrid({
+                width: 300,
+                columns: [{
+                    xtype: 'treecolumn',
+                    text: 'F1',
+                    dataIndex: 'f1',
+                    width: 100
+                }, {
+                    text: 'F2',
+                    dataIndex: 'f2',
+                    flex: 1
+                }, {
+                    xtype: 'actioncolumn'
+                }]
+            });
+
+            tree.getNavigationModel().setPosition(0, 0);
+            waitsFor(function() {
+                return tree.view.containsFocus;
+            });
+            runs(function() {
+                expect(tree.view.el.findTabbableElements({skipSelf: true}).length).toBe(0);
+                tree.store.first().expand();
+                expect(tree.view.el.findTabbableElements({skipSelf: true}).length).toBe(0);
+            });
+        });
+    });
     
     describe('Model mutation', function() {
         it('should not have to render a whole row, it should update innerHTML of cell', function() {
@@ -731,7 +761,7 @@ describe("Ext.tree.TreeGrid", function() {
         });
     });
 
-    describe('auto hide headers, then headers arriging from a bind', function() {
+    describe('auto hide headers, then headers arriving from a bind', function() {
         var store = Ext.create('Ext.data.TreeStore', {
             autoDestroy: true,
             root: {
@@ -760,7 +790,6 @@ describe("Ext.tree.TreeGrid", function() {
             tree = Ext.create('Ext.tree.Panel', {
                 title: 'Simple Tree',
                 width: 300,
-                hideHeaders: null,
                 viewModel: {
                     data: {
                         headerText: 'A header'

@@ -98,6 +98,10 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
         this.isDragging = false;
     },
 
+    isSameItem: function (a, b) {
+        return a && b && a.series === b.series && a.field === b.field && a.index === b.index;
+    },
+
     onTapGesture: function (e) {
         var me = this;
 
@@ -109,8 +113,8 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
 
         var item = me.getItemForEvent(e);
 
-        if (me.stickyHighlightItem && item && (me.stickyHighlightItem.index === item.index)) {
-            item = null;
+        if (me.isSameItem(me.stickyHighlightItem, item)) {
+            item = null; // toggle
         }
         me.stickyHighlightItem = item;
         me.highlight(item);

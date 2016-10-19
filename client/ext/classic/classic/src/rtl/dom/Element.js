@@ -349,7 +349,7 @@ Ext.define('Ext.rtl.dom.Element', {
     },
 
     wrap: function() {
-        var parent = this.parent(),
+        var wrapFly = (this.wrapFly || (this.wrapFly = new Ext.dom.Fly())).attach(this.dom.parentNode),
             rtlCls = Ext.baseCSSPrefix + 'rtl',
             ltrCls = Ext.baseCSSPrefix + 'ltr',
             wrapEl = this.callParent(arguments),
@@ -358,15 +358,15 @@ Ext.define('Ext.rtl.dom.Element', {
         // if the parentNode of the element being wrapped has the "x-rtl" or "x-ltr" css
         // class, then add that class to the wrapper as well.  This ensures that descendant
         // and child selectors still apply e.g. ".x-rtl > .x-foo" or ".x-ltr .x-foo"
-        if (parent.hasCls(rtlCls)) {
+        if (wrapFly.hasCls(rtlCls)) {
             cls = rtlCls;
-        } else if (parent.hasCls(ltrCls)) {
+        } else if (wrapFly.hasCls(ltrCls)) {
             cls = ltrCls;
         }
 
         if (cls) {
             // superclass method may return dom, so use fly() to access the wrap el
-            Ext.fly(wrapEl, '_internal').addCls(cls);
+            wrapFly.attach(wrapEl).addCls(cls);
         }
 
         return wrapEl;

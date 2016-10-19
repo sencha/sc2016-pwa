@@ -301,8 +301,8 @@ Ext.define('Ext.data.BufferedStore', {
                 me.loading = false;
                 data.un('pageadd', waitForReload);
                 records = data.getRange(startIdx, endIdx);
-                me.fireEvent('load', me, records, true);
                 me.fireEvent('refresh', me);
+                me.fireEvent('load', me, records, true);
             }
         };
         bufferZone = Math.ceil((me.getLeadingBufferZone() + me.getTrailingBufferZone()) / 2);
@@ -915,8 +915,8 @@ Ext.define('Ext.data.BufferedStore', {
                             }
                         }
                         me.getData().un('pageadd', waitForReload);
-                        me.fireEvent('load', me, [], true);
                         me.fireEvent('refresh', me);
+                        me.fireEvent('load', me, [], true);
                     }
                 } else {
                     me.cachePage(records, operation.getPage());
