@@ -20,5 +20,5 @@
     }
 },
 
-// @sw-precache { urlPattern: "\\/portraits\\/.*", handler: "networkFirst", options: { cache: { name: "images", maxEntries: 100 } } }
-// @sw-precache { handler: "networkFirst", options: { cache: { name: "api" } } }
+// @sw-cache { urlPattern: "\\/portraits\\/.*", handler: "networkFirst", options: { cache: { name: "images", maxEntries: 100 } } }
+// @sw-cache { handler: "networkFirst", options: { cache: { name: "api" } } }
