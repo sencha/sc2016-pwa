@@ -50,6 +50,17 @@ Ext.define('Ext.plugin.PullRefresh', {
         overlay: false,
 
         /**
+         * @cfg {Boolean} mergeData
+         * `true` to insert new records into the store and to replace the data for
+         * any incoming records that exist.
+         *
+         * `false` to completely overwrite store data with the fetched response.
+         *
+         * @since 6.2.1
+         */
+        mergeData: true,
+
+        /**
          * @cfg {Ext.dataview.List} list
          * The list to which this PullRefresh plugin is connected.
          * This will usually by set automatically when configuring the list with this plugin.
@@ -257,27 +268,31 @@ Ext.define('Ext.plugin.PullRefresh', {
     onLatestFetched: function(newRecords) {
         var me = this,
             store = me.getList().getStore(),
-            oldRecords = store.getData(),
-            length = newRecords.length,
-            toInsert = [],
-            newRecord, oldRecord, i;
+            length, toInsert,
+            oldRecords, newRecord, oldRecord, i;
 
-        for (i = 0; i < length; i++) {
-            newRecord = newRecords[i];
-            oldRecord = oldRecords.getByKey(newRecord.getId());
+        if (me.getMergeData()) {
+            oldRecords = store.getData();
+            toInsert = [];
+            length = newRecords.length;
 
-            if (oldRecord) {
-                oldRecord.set(newRecord.getData());
-            } else {
-                toInsert.push(newRecord);
+            for (i = 0; i < length; i++) {
+                newRecord = newRecords[i];
+                oldRecord = oldRecords.getByKey(newRecord.getId());
+
+                if (oldRecord) {
+                    oldRecord.set(newRecord.getData());
+                } else {
+                    toInsert.push(newRecord);
+                }
             }
 
-            oldRecord = undefined;
+            store.insert(0, toInsert);
+        } else {
+            store.loadRecords(newRecords);
         }
-
-        store.insert(0, toInsert);
         me.setState('loaded');
-        me.fireEvent('latestfetched', me, toInsert);
+        me.fireEvent('latestfetched', me, toInsert || newRecords);
 
         if (me.getAutoSnapBack()) {
             me.snapBack();

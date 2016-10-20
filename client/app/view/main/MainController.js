@@ -40,7 +40,7 @@ Ext.define('PWA.view.main.MainController', {
     },
 
     onItemSelected: function (sender, index, target, record) {
-        this.showPerson(record.get('person'));
+        this.showPerson(record.data);
     },
 
     onRefresh: function() {

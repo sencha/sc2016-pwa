@@ -25,23 +25,27 @@ Ext.define('PWA.view.main.List', {
         }
     },
 
-    scrollable: true,
+    layout: 'fit',
 
     items: {
         xtype: 'list',
+
         bind: {
             store: '{personnel}'
-        },
+        }, 
 
-        plugins: [new Ext.plugin.PullRefresh()],
+        plugins: [{
+            xclass: 'Ext.plugin.PullRefresh',
+            pullText: 'Pull down to refresh'
+        }],
 
         itemTpl: [
             '<div class="item-wrapper">',
                 '<div class="content">',
-                    '<div class="picture large" style="background-image:url({person.picture})"></div>',
+                    '<div class="picture large" style="background-image:url({picture})"></div>',
                     '<div class="details">',
-                        '<div class="person-name">{person.firstname} {person.lastname}</div>',
-                        '<div class="person-title">{person.title}</div>',
+                        '<div class="person-name">{firstname} {lastname}</div>',
+                        '<div class="person-title">{title}</div>',
                     '</div>',
                 '</div>',
             '</div>'

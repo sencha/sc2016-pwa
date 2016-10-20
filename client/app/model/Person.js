@@ -1,5 +1,6 @@
 Ext.define('PWA.model.Person', {
     extend: 'Ext.data.Model',
+    
     fields: [
         { name: 'id', type: 'string' },
         { name: 'username', type: 'string' },

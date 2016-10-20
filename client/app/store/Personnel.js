@@ -3,9 +3,7 @@ Ext.define('PWA.store.Personnel', {
 
     alias: 'store.personnel',
 
-    fields: [
-        'name', 'email', 'phone'
-    ],
+    model: 'PWA.model.Person',
 
     autoLoad: true,
 
