@@ -10,10 +10,13 @@ Ext.define('PWA.store.Personnel', {
     proxy: {
         type: 'ajax',
 
+        // @sw-cache { urlPattern: "\\/portraits\\/.*", handler: "networkFirst", options: { cache: { name: "images", maxEntries: 100 } } }
+        // @sw-cache { handler: "networkFirst", options: { cache: { name: "api" } } }
         url: '/personnel.json',
 
         reader: {
             type: 'json'
         }
     }
+
 });
