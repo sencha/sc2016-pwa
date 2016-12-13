@@ -1,6 +1,6 @@
 # sc2016-pwa
 
-A demo of the new progressive web app support in Cmd 7.
+A demo of the new progressive web app support in Cmd 6.5.
 
 ## To run
 
